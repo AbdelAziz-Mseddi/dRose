@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+yt-dlp
+tqdm
+jinja2
+python-multipart
+pydantic
