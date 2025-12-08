@@ -87,33 +87,27 @@ python cli/cli.py --playlist "PLAYLIST_URL" --format mp3
 
 ## 📁 Project Structure
 
+```text
 youtube_downloader/
 │
-├── core/                  # Core functionality shared by CLI and Web
-│   ├── downloader.py      # Functions to download songs/playlists
-│   ├── playlist.py        # Playlist metadata fetching
-│   └── utils.py           # Helpers: file paths, ZIP creation, sanitizing
+├── core/               # Core functionality and business logic
+│   ├── downloader.py   # Main YouTube downloader using yt-dlp
+│   ├── playlist.py     # Playlist parsing and extraction
+│   └── utils.py        # Utility functions
 │
-├── cli/                   # Command-line interface
-│   └── cli.py             # Entry point for CLI usage
+├── cli/                # Command-line interface
+│   └── cli.py          # Main CLI entry point
 │
-├── web/                   # Web application (FastAPI)
-│   ├── app.py             # FastAPI app initialization
-│   ├── routers/           # API route definitions
-│   │   └── playlist_routes.py
-│   ├── services/          # Business logic layer
-│   │   └── playlist_service.py
-│   ├── templates/         # HTML templates
-│   │   └── index.html
-│   └── static/            # Frontend assets (CSS/JS)
-│       ├── styles.css
-│       └── script.js
+├── web/                # Web application
+│   ├── app.py          # FastAPI application
+│   ├── templates/      # HTML templates
+│   └── static/         # CSS and JS files
 │
-├── downloads/             # Folder where downloaded songs/playlists are saved
-├── venv/                  # Python virtual environment (ignored in Git)
-├── requirements.txt       # Python dependencies
-└── README.md              # Project documentation
-
+├── downloads/          # Folder for downloaded files
+├── venv/               # Virtual environment (ignored in Git)
+├── requirements.txt    # Python dependencies
+└── README.md           # Project documentation
+```
 ---
 
 ## ⚠️ Notes
