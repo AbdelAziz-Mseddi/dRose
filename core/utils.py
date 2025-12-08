@@ -57,3 +57,25 @@ def zip_folder(folder_path, output_path):
     with zipfile.ZipFile(output_path, 'w', compression=zipfile.ZIP_DEFLATED) as zipf:
         list(map(zipf.write, music))
 zip_folder("zip_test", "downloads/playlist.zip")
+
+###Convert bytes to human-readable strings###
+def format_size(bytes):
+    bina=bin(bytes)
+    anib=bina[2:]
+    print(anib)
+    longu=len(anib)
+    print(longu)
+    puiss=0
+    for i in range(longu-1,-1,-1):
+        print(anib[i],i)
+        if (longu-1-i)%10==0:
+            puiss=longu-1-i
+    noumrou=bytes/2**puiss
+    if puiss == 0: unit = "B"
+    elif puiss == 10: unit = "KB"
+    elif puiss == 20: unit = "MB"
+    elif puiss == 30: unit = "GB"
+    elif puiss == 40: unit = "TB"
+    res=f"{noumrou:.3f}{unit}"
+    return res
+print("The file size, with 3 digits of precision, is : ",format_size(6843668))
