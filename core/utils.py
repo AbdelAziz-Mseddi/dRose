@@ -38,12 +38,14 @@ import os
 ###Ensure a folder exists for downloads###
 def create_folder(path):
     dir=[file for file in os.listdir()]
-    print (dir)
-    if path  in dir or path.capitalize() in dir:
-        print("mawjoud")
+    print ("The current directory contains : ",dir)
+    if path in dir:
+        print ("You can find your downloaded MUSIC in : ", os.path.abspath("downloads") )
+    elif path.capitalize() in dir:
+        print ("You can find your downloaded MUSIC in : : ", os.path.abspath("Downloads") )
     else:
         os.mkdir("downloads")
-        print("mouch mawjoud")
+        print ("You can find your downloaded MUSIC in : ", os.path.abspath("downloads") )
 create_folder("downloads")
 
 import os
