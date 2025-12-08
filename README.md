@@ -1,7 +1,17 @@
-# 🎵 YouTube Music Downloader
+<div align="center">
+  <img src="logos/dRose.png" alt="dragoulaRose Logo" width="200" height="auto">
+  
+  <h1>dragRose</h1>
+  
+  <p>
+    <b>The Ultimate YouTube Music Downloader</b>
+  </p>
 
-[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+  [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
+  [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+</div>
+
+---
 
 A **Python-based project** to download **YouTube Music songs and playlists** in one click.  
 Includes both a **web app** (FastAPI) and a **command-line interface (CLI)**.
