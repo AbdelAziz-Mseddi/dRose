@@ -35,7 +35,8 @@ Includes both a **web app** (FastAPI) and a **command-line interface (CLI)**.
 - **Python 3.10+** – main language  
 - **yt-dlp** – core YouTube downloader  
 - **ffmpeg** – audio conversion and processing  
-- **FastAPI** – backend web framework  
+- **FastAPI** – backend web framework 
+- **imageio-ffmpeg** – Bundled FFmpeg binary (No installation required)
 - **Uvicorn** – ASGI server for FastAPI  
 - **Jinja2** – HTML templates for frontend  
 - **TQDM** – CLI progress bars  
@@ -49,7 +50,7 @@ Includes both a **web app** (FastAPI) and a **command-line interface (CLI)**.
 ### 1. Clone the repository
 
 git clone https://github.com/yourusername/youtube-downloader.git
-cd youtube-downloader
+cd dRose
 
 
 ### 2. Create a virtual environment
@@ -68,11 +69,6 @@ source venv/bin/activate
 ### 4. Install dependencies
 
 pip install -r requirements.txt
-
-### 5. Install ffmpeg
-
-- Download ffmpeg from [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
-- Add it to your system PATH
 
 ---
 
@@ -99,6 +95,8 @@ python cli/cli.py --playlist "PLAYLIST_URL" --format mp3
 
 ```text
 youtube_downloader/
+│
+├── assets/             # Project assets (logos, iamges)
 │
 ├── core/               # Core functionality and business logic
 │   ├── downloader.py   # Main YouTube downloader using yt-dlp
