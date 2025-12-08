@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="logos/dRose.png" alt="dragoulaRose Logo" width="200" height="auto">
+  <img src="assets/dRose.png" alt="dragoulaRose Logo" width="200" height="auto">
   
   <h1>dragRose</h1>
   

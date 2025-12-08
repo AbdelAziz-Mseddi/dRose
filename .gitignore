@@ -1,5 +1,4 @@
 logos/
-!logos/dRose.png
 venv/
 __pycache__/
 *.pyc
