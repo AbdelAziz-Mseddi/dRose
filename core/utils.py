@@ -29,8 +29,7 @@ def sanitize_filenames(names):
         newNew="".join(newString)
         newNew=newNew.strip()
         newStrings.append(newNew)
-    return newStrings
-        
+    return newStrings     
 n=int(input("donner nombre de titres de videos : "))
 trackNames=[input("donner titre de video: ") for t in range (n) ]
 print( sanitize_filename(tuple(trackNames)) )
@@ -46,3 +45,13 @@ def create_folder(path):
         os.mkdir("downloads")
         print("mouch mawjoud")
 create_folder("downloads")
+
+import os
+import zipfile
+###Bundle multiple songs into a ZIP###
+def zip_folder(folder_path, output_path):
+    music=[f"{folder_path}/{track}" for track in os.listdir(folder_path)]
+    print(music)
+    with zipfile.ZipFile(output_path, 'w', compression=zipfile.ZIP_DEFLATED) as zipf:
+        list(map(zipf.write, music))
+zip_folder("zip_test", "downloads/playlist.zip")
