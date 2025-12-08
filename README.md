@@ -120,7 +120,6 @@ youtube_downloader/
 
 ## ⚠️ Notes
 
-- Ensure ffmpeg is installed and in your system PATH
 - The project uses a virtual environment for dependency management
 - For Windows users, `.DS_Store` files are not relevant
 
