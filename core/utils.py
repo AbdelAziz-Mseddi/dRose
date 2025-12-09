@@ -71,11 +71,14 @@ def format_size(bytes):
         if (longu-1-i)%10==0:
             puiss=longu-1-i
     noumrou=bytes/2**puiss
-    if puiss == 0: unit = "B"
-    elif puiss == 10: unit = "KB"
-    elif puiss == 20: unit = "MB"
-    elif puiss == 30: unit = "GB"
-    elif puiss == 40: unit = "TB"
+    puisx={
+        0:'B',
+        10:'KB',
+        20:'MB',
+        30:'GB',
+        40:'TB'
+    }
+    unit=puisx[puiss]
     res=f"{noumrou:.3f}{unit}"
     return res
 print("The file size, with 3 digits of precision, is : ",format_size(6843668))
