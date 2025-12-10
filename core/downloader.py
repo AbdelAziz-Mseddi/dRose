@@ -26,15 +26,13 @@ def download_audio_raw(url, output_folder="rawDownloads"):
         filename = ydl.prepare_filename(song)
         songName=song.get('title')
         return os.path.abspath(filename),songName
-adress,songName=download_audio_raw("https://music.youtube.com/watch?v=4tJKyfXCDUE&si=aT8MPsNeI_7kDeWa")
-print(adress)
 
 import subprocess
 ###Convert downloaded audio → MP3 using ffmpeg###
 
-def convert_to_mp3(input_path, *output_path):
-    os.makedirs("downloads", exist_ok=True)
-    output_path=f"downloads\{songName}.mp3"
+def convert_to_mp3(input_path, songName, output_folder):
+    os.makedirs(f"{output_folder}", exist_ok=True)
+    output_path=f"{output_folder}\{songName}.mp3"
     ffmpeg_exe=get_ffmpeg_path()
     cmnd = [
         ffmpeg_exe, # The program to run
@@ -53,10 +51,10 @@ def convert_to_mp3(input_path, *output_path):
         encoding='utf-8',       # Force UTF-8 encoding
         errors='replace'
     )
-convert_to_mp3(adress)
     
 
 ###Wrapper to donwload a single song###
 def download_single(url, output_folder="downloads"):
-    pass
-#download_single("https://music.youtube.com/watch?v=4tJKyfXCDUE&si=aT8MPsNeI_7kDeWa")
+    adress,songName=download_audio_raw(url)
+    convert_to_mp3(adress, songName, output_folder)
+download_single("https://music.youtube.com/watch?v=4tJKyfXCDUE&si=aT8MPsNeI_7kDeWa")
