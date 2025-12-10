@@ -37,3 +37,16 @@ def get_song_urls_from_playlist(url):
                 track_urls=[track.get('url') for track in plInfo['entries']]
     return track_urls
 print( get_song_urls_from_playlist("https://music.youtube.com/playlist?list=PLVe3Pb0zUL07V3hhdzjTsaiw7rp7Sg7eD&si=zY7y170jl-TAVuUy") ) 
+
+###Retrieve data for a single song (title, duration, etc.)###
+
+def get_song_info(url):
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        songInfo=ydl.extract_info(url, download=False)
+        res={
+            'title':songInfo.get('title'),
+            'duration':songInfo.get('duration'),
+            'uploader':songInfo.get('uploader')
+        }
+    return res
+print(get_song_info("https://music.youtube.com/watch?v=4tJKyfXCDUE&si=aT8MPsNeI_7kDeWa"))
