@@ -17,4 +17,11 @@ def get_playlist_info(url):
             print("\nTrack List:")
             for track in plInfo['entries']:
                 print(f"╠ {track.get('title')}, ID={track.get('id')}")
+    res={
+        "title":plInfo.get('title'),
+        "size":plInfo.get('playlist_count'),
+        "tracks":[track.get('title') for track in plInfo['entries']]
+    }
+    print(res)
+    return res
 get_playlist_info("https://music.youtube.com/playlist?list=PLVe3Pb0zUL07V3hhdzjTsaiw7rp7Sg7eD&si=zY7y170jl-TAVuUy")
