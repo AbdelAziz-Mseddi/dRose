@@ -68,12 +68,9 @@ def download_playlist(url):
     else:
         for track in urls:
             downloader.download_single(track, f"Downloads/{title}")
-download_playlist("https://music.youtube.com/playlist?list=PLVe3Pb0zUL04fRNvYJnpg5MFpzcoeT8qb&si=z51v5yyTOxzOZHVu")
 
-
-
-
-# if __name__ == "__main__":
-#     get_playlist_info("https://music.youtube.com/playlist?list=PLVe3Pb0zUL07V3hhdzjTsaiw7rp7Sg7eD&si=zY7y170jl-TAVuUy")
-#     print( get_song_urls_from_playlist("https://music.youtube.com/playlist?list=PLVe3Pb0zUL07V3hhdzjTsaiw7rp7Sg7eD&si=zY7y170jl-TAVuUy") ) 
-#     print(get_song_info("https://music.youtube.com/watch?v=4tJKyfXCDUE&si=aT8MPsNeI_7kDeWa"))
+if __name__ == "__main__":
+    get_playlist_info("https://music.youtube.com/playlist?list=PLVe3Pb0zUL07V3hhdzjTsaiw7rp7Sg7eD&si=zY7y170jl-TAVuUy")
+    print( get_song_urls_from_playlist("https://music.youtube.com/playlist?list=PLVe3Pb0zUL07V3hhdzjTsaiw7rp7Sg7eD&si=zY7y170jl-TAVuUy") ) 
+    print(get_song_info("https://music.youtube.com/watch?v=4tJKyfXCDUE&si=aT8MPsNeI_7kDeWa"))
+    download_playlist("https://music.youtube.com/playlist?list=PLVe3Pb0zUL04fRNvYJnpg5MFpzcoeT8qb&si=z51v5yyTOxzOZHVu")
