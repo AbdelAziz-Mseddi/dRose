@@ -1,6 +1,7 @@
 import imageio_ffmpeg
 import os
 import yt_dlp
+import utils
 
 ###Locate and return ffmpeg from imageio-ffmpeg.###
 
@@ -24,7 +25,7 @@ def download_audio_raw(url, output_folder="rawDownloads"):
         print(f"Downloading: {url}")
         song=ydl.extract_info(url, download=True)
         filename = ydl.prepare_filename(song)
-        songName=song.get('title')
+        songName=utils.sanitize_filename(song.get('title'))
         return os.path.abspath(filename),songName
 
 import subprocess
@@ -54,7 +55,7 @@ def convert_to_mp3(input_path, songName, output_folder):
     
 
 ###Wrapper to donwload a single song###
-def download_single(url, output_folder="downloads"):
+def download_single(url, output_folder="downloads/playlist"):
     adress,songName=download_audio_raw(url)
     convert_to_mp3(adress, songName, output_folder)
 
