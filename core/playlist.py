@@ -1,3 +1,7 @@
+import downloader
+import utils
+###
+
 ydl_opts = {
         'extract_flat': True,   # Don't download videos, just get valid URLs/titles
         'dump_single_json': True,   # mimic the JSON output format
@@ -25,7 +29,6 @@ def get_playlist_info(url):
     }
     print(res)
     return res
-get_playlist_info("https://music.youtube.com/playlist?list=PLVe3Pb0zUL07V3hhdzjTsaiw7rp7Sg7eD&si=zY7y170jl-TAVuUy")
 
 ###Return a list of URLs for all songs in the playlist###
 
@@ -36,7 +39,6 @@ def get_song_urls_from_playlist(url):
             for track in plInfo['entries']:
                 track_urls=[track.get('url') for track in plInfo['entries']]
     return track_urls
-print( get_song_urls_from_playlist("https://music.youtube.com/playlist?list=PLVe3Pb0zUL07V3hhdzjTsaiw7rp7Sg7eD&si=zY7y170jl-TAVuUy") ) 
 
 ###Retrieve data for a single song (title, duration, etc.)###
 
@@ -49,4 +51,29 @@ def get_song_info(url):
             'uploader':songInfo.get('uploader')
         }
     return res
-print(get_song_info("https://music.youtube.com/watch?v=4tJKyfXCDUE&si=aT8MPsNeI_7kDeWa"))
+
+import os
+###DOWNLOAD PLAYLIST###
+
+def download_playlist(url):
+    urls=get_song_urls_from_playlist(url)
+    metadata=get_playlist_info(url)
+    title=metadata['title']
+    title=utils.sanitize_filename(title)
+    utils.create_folder(title)
+    available=[file for file in os.listdir()]
+    if "downloads" in available:
+        for track in urls:
+            downloader.download_single(track, f"downloads/{title}")
+    else:
+        for track in urls:
+            downloader.download_single(track, f"Downloads/{title}")
+download_playlist("https://music.youtube.com/playlist?list=PLVe3Pb0zUL04fRNvYJnpg5MFpzcoeT8qb&si=z51v5yyTOxzOZHVu")
+
+
+
+
+# if __name__ == "__main__":
+#     get_playlist_info("https://music.youtube.com/playlist?list=PLVe3Pb0zUL07V3hhdzjTsaiw7rp7Sg7eD&si=zY7y170jl-TAVuUy")
+#     print( get_song_urls_from_playlist("https://music.youtube.com/playlist?list=PLVe3Pb0zUL07V3hhdzjTsaiw7rp7Sg7eD&si=zY7y170jl-TAVuUy") ) 
+#     print(get_song_info("https://music.youtube.com/watch?v=4tJKyfXCDUE&si=aT8MPsNeI_7kDeWa"))
