@@ -36,17 +36,23 @@ print( sanitize_filename(tuple(trackNames)) )
 
 import os
 ###Ensure a folder exists for downloads###
-def create_folder(path):
-    dir=[file for file in os.listdir()]
+def create_folder(playPath,path="downloads"):
+    available=[file for file in os.listdir()]
     print ("The current directory contains : ",dir)
-    if path in dir:
-        print ("You can find your downloaded MUSIC in : ", os.path.abspath("downloads") )
-    elif path.capitalize() in dir:
-        print ("You can find your downloaded MUSIC in : : ", os.path.abspath("Downloads") )
+    if path in available:
+        os.chdir(f"{path}")
+        os.mkdir(f"{playPath}")
+        print ("You can find your downloaded MUSIC in : ", os.path.abspath(f"{path}/{playPath}") )
+    elif path.capitalize() in available:
+        os.chdir(f"{path}")
+        os.mkdir(f"{playPath}")
+        print ("You can find your downloaded MUSIC in : ", os.path.abspath(f"{path}/{playPath}") )
     else:
-        os.mkdir("downloads")
-        print ("You can find your downloaded MUSIC in : ", os.path.abspath("downloads") )
-create_folder("downloads")
+        os.mkdir(f"{path}")
+        os.chdir(f"{path}")
+        os.mkdir(f"{playPath}")
+        print ("You can find your downloaded MUSIC in : ", os.path.abspath(f"{path}/{playPath}") )
+create_folder("playlistName")
 
 import os
 import zipfile
