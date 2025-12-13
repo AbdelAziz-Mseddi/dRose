@@ -57,4 +57,6 @@ def convert_to_mp3(input_path, songName, output_folder):
 def download_single(url, output_folder="downloads"):
     adress,songName=download_audio_raw(url)
     convert_to_mp3(adress, songName, output_folder)
-download_single("https://music.youtube.com/watch?v=4tJKyfXCDUE&si=aT8MPsNeI_7kDeWa")
+
+if __name__ == "__main__":
+    download_single("https://music.youtube.com/watch?v=4tJKyfXCDUE&si=aT8MPsNeI_7kDeWa")

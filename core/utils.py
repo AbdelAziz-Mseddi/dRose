@@ -11,9 +11,6 @@ def sanitize_filename(name):
     newNew="".join(newString)
     newNew=newNew.strip()
     return newNew
-s=input("donner titre de video : ")
-S=sanitize_filename(s)
-print(S)
 
 ##version that takes multiple names
 
@@ -30,9 +27,6 @@ def sanitize_filenames(names):
         newNew=newNew.strip()
         newStrings.append(newNew)
     return newStrings     
-n=int(input("donner nombre de titres de videos : "))
-trackNames=[input("donner titre de video: ") for t in range (n) ]
-print( sanitize_filename(tuple(trackNames)) )
 
 import os
 ###Ensure a folder exists for downloads###
@@ -52,7 +46,6 @@ def create_folder(playPath,path="downloads"):
         os.chdir(f"{path}")
         os.mkdir(f"{playPath}")
         print ("You can find your downloaded MUSIC in : ", os.path.abspath(f"{path}/{playPath}") )
-create_folder("playlistName")
 
 import os
 import zipfile
@@ -62,7 +55,6 @@ def zip_folder(folder_path, output_path):
     print(music)
     with zipfile.ZipFile(output_path, 'w', compression=zipfile.ZIP_DEFLATED) as zipf:
         list(map(zipf.write, music))
-zip_folder("zip_test", "downloads/playlist.zip")
 
 ###Convert bytes to human-readable strings###
 def format_size(bytes):
@@ -87,4 +79,14 @@ def format_size(bytes):
     unit=puisx[puiss]
     res=f"{noumrou:.3f}{unit}"
     return res
-print("The file size, with 3 digits of precision, is : ",format_size(6843668))
+
+if __name__ == "__main__":
+    s=input("donner titre de video : ")
+    S=sanitize_filename(s)
+    print(S)
+    n=int(input("donner nombre de titres de videos : "))
+    trackNames=[input("donner titre de video: ") for t in range (n) ]
+    print( sanitize_filename(tuple(trackNames)) )
+    create_folder("playlistName")
+    zip_folder("zip_test", "downloads/playlist.zip")
+    print("The file size, with 3 digits of precision, is : ",format_size(6843668))
