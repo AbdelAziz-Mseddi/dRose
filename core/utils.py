@@ -34,17 +34,13 @@ def create_folder(playPath,path="downloads"):
     available=[file for file in os.listdir()]
     print ("The current directory contains : ",dir)
     if path in available:
-        os.chdir(f"{path}")
-        os.mkdir(f"{playPath}")
+        os.makedirs(f"{path}/{playPath}", exist_ok=True)
         print ("You can find your downloaded MUSIC in : ", os.path.abspath(f"{path}/{playPath}") )
     elif path.capitalize() in available:
-        os.chdir(f"{path}")
-        os.mkdir(f"{playPath}")
-        print ("You can find your downloaded MUSIC in : ", os.path.abspath(f"{path}/{playPath}") )
+        os.makedirs(f"{path.capitalize()}/{playPath}", exist_ok=True)
+        print ("You can find your downloaded MUSIC in : ", os.path.abspath(f"{path.capitalize()}/{playPath}") )
     else:
-        os.mkdir(f"{path}")
-        os.chdir(f"{path}")
-        os.mkdir(f"{playPath}")
+        os.makedirs(f"{path}/{playPath}", exist_ok=True)
         print ("You can find your downloaded MUSIC in : ", os.path.abspath(f"{path}/{playPath}") )
 
 import os
