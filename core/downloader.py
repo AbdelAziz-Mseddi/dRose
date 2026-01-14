@@ -1,7 +1,7 @@
 import imageio_ffmpeg
 import os
 import yt_dlp
-import utils
+from . import utils
 
 ###Locate and return ffmpeg from imageio-ffmpeg.###
 
