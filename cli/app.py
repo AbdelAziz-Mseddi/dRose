@@ -9,6 +9,8 @@ app=typer.Typer(name="drose",
                 add_completion=False)
 console=Console()
 
+main=app
+
 @app.command()
 def version():
     """show version"""
@@ -20,4 +22,4 @@ def test():
     console.print("[violet]wiiiiiw[/violet]")
 
 if __name__ == "__main__":
-    app()
+    main()
