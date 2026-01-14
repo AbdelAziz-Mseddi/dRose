@@ -14,7 +14,7 @@ app=typer.Typer(name="drose",
 #adding the precious commands
 app.add_typer(config.app, name="config", help="Manage Configurations")
 app.add_typer(doctor.app, name="doctor", help="Check System Requirements")
-app.add_typer(playlist.app, name="config", help="Download and Manage Playlists")
+app.add_typer(playlist.app, name="playlist", help="Download and Manage Playlists")
 
 main=app
 
