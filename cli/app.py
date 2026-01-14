@@ -7,10 +7,15 @@ from cli.commands import config, doctor, playlist
 console=Console()
 #drose root command
 app=typer.Typer(name="drose",
-                help="i am dragoula, your sense of Music's savior:3",
+                help="<drose>, your music companion :3",
                 no_args_is_help=True,
                 add_completion=False)
+
+#adding the precious commands
 app.add_typer(config.app, name="config", help="Manage Configurations")
+app.add_typer(doctor.app, name="doctor", help="Check System Requirements")
+app.add_typer(playlist.app, name="config", help="Download and Manage Playlists")
+
 main=app
 
 #initial commands
