@@ -1,5 +1,5 @@
-import downloader
-import utils
+from . import downloader
+from . import utils
 ###
 
 ydl_opts = {
