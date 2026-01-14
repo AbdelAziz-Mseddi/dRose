@@ -2,15 +2,18 @@ import typer
 from rich.console import Console
 from rich.table import Table
 from rich.progress import Progress, SpinnerColumn
+from cli.commands import config, doctor, playlist
 
+console=Console()
+#drose root command
 app=typer.Typer(name="drose",
-                help="i am homelander, your savior:)",
+                help="i am dragoula, your sense of Music's savior:3",
                 no_args_is_help=True,
                 add_completion=False)
-console=Console()
-
+app.add_typer(config.app, name="config", help="Manage Configurations")
 main=app
 
+#initial commands
 @app.command()
 def version():
     """show version"""
