@@ -6,7 +6,7 @@ app=typer.Typer(
     add_completion=False
 )
 
-@app.command
+@app.command()
 def check():
     """check system requirements"""
     pass

@@ -7,17 +7,17 @@ app=typer.Typer(
 )
 
 
-@app.command
+@app.command()
 def set():
     """set default configuration"""
     pass
 
-@app.command
+@app.command()
 def set():
     """get the default configuration of a setting"""
     pass
 
-@app.command
+@app.command()
 def show():
     """show your full default configuration"""
     pass

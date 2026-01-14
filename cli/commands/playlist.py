@@ -7,7 +7,7 @@ app=typer.Typer(
     add_completion=False
 )
 
-@app.command
+@app.command()
 def download():
     """download your favorite playlist"""
     pass
