@@ -7,7 +7,7 @@ from cli.commands import config, doctor, playlist
 console=Console()
 #drose root command
 app=typer.Typer(name="drose",
-                help="<drose>, your music companion :3",
+                help="[#8A244B]drose[/#8A244B], [#5B23FF]your music companion :3[/#5B23FF]",
                 no_args_is_help=True,
                 add_completion=False)
 
