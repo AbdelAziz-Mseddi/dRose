@@ -13,7 +13,7 @@ def set():
     pass
 
 @app.command()
-def set():
+def get():
     """get the default configuration of a setting"""
     pass
 
