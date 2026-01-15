@@ -18,7 +18,7 @@ ydl_opts = {
 
 ###Download original audio file with yt-dlp###
 
-def download_audio(url, output_folder="downloads", audio_format="mp3"):
+def download_audio(url, output_folder=".", audio_format="mp3"):
     os.makedirs(output_folder, exist_ok=True)
     opts = {**ydl_opts,
             'outtmpl': os.path.join(output_folder, '%(title)s.%(ext)s'),

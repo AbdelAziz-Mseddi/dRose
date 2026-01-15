@@ -55,7 +55,7 @@ def get_song_info(url):
 import os
 ###DOWNLOAD PLAYLIST###
 
-def download_playlist(url, output_folder="downloads", audio_format="mp3"):
+def download_playlist(url, output_folder=".", audio_format="mp3"):
     urls=get_song_urls_from_playlist(url)
     metadata=get_playlist_info(url)
     title=metadata['title']
