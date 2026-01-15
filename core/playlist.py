@@ -55,7 +55,7 @@ def get_song_info(url):
 import os
 ###DOWNLOAD PLAYLIST###
 
-def download_playlist(url):
+def download_playlist(url, audio_format="mp3"):
     urls=get_song_urls_from_playlist(url)
     metadata=get_playlist_info(url)
     title=metadata['title']
@@ -64,10 +64,10 @@ def download_playlist(url):
     available=[file for file in os.listdir()]
     if "downloads" in available:
         for track in urls:
-            downloader.download_single(track, f"downloads/{title}")
+            downloader.download_audio(track, f"downloads/{title}", audio_format)
     else:
         for track in urls:
-            downloader.download_single(track, f"Downloads/{title}")
+            downloader.download_audio(track, f"Downloads/{title}")
 
 if __name__ == "__main__":
     get_playlist_info("https://music.youtube.com/playlist?list=PLVe3Pb0zUL07V3hhdzjTsaiw7rp7Sg7eD&si=zY7y170jl-TAVuUy")

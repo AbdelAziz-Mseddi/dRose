@@ -18,46 +18,24 @@ ydl_opts = {
 
 ###Download original audio file with yt-dlp###
 
-def download_audio_raw(url, output_folder="rawDownloads"):
+def download_audio(url, output_folder="rawDownloads", audio_format="mp3"):
     os.makedirs(output_folder, exist_ok=True)
-    opts = {**ydl_opts, 'outtmpl': os.path.join(output_folder, '%(title)s.%(ext)s')}
+    opts = {**ydl_opts,
+            'outtmpl': os.path.join(output_folder, '%(title)s.%(ext)s'),
+            'postprocessors': [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': audio_format,  # 'mp3', 'm4a', 'flac', 'wav', etc.
+                'preferredquality': '192'       # bitrate
+        }]}
     with yt_dlp.YoutubeDL(opts) as ydl:
         print(f"Downloading: {url}")
         song=ydl.extract_info(url, download=True)
         filename = ydl.prepare_filename(song)
+        filename= os.path.splitext(filename)[0] + "." + audio_format
         songName=utils.sanitize_filename(song.get('title'))
-        return os.path.abspath(filename),songName
+        adress= os.path.abspath(filename)
+        return adress,songName
 
-import subprocess
-###Convert downloaded audio → MP3 using ffmpeg###
-
-def convert_to_mp3(input_path, songName, output_folder):
-    os.makedirs(f"{output_folder}", exist_ok=True)
-    output_path=f"{output_folder}\{songName}.mp3"
-    ffmpeg_exe=get_ffmpeg_path()
-    cmnd = [
-        ffmpeg_exe, # The program to run
-        '-y',   # Overwrite output file without asking
-        '-i', input_path,   # Input file
-        '-acodec', 'libmp3lame',    # Audio codec (mp3)
-        '-q:a', '2',    # Quality (VBR scale 0-9, 2 is standard
-        output_path     # Output file
-    ]
-    exec=subprocess.run(
-        cmnd,
-        check=True,     # Capture standard output
-        stdout=subprocess.PIPE,     # Capture standard output
-        stderr=subprocess.PIPE,     # Capture error/log output (FFmpeg logs to stderr!)
-        text=True,   # Return strings instead of bytes
-        encoding='utf-8',       # Force UTF-8 encoding
-        errors='replace'
-    )
-    
-
-###Wrapper to donwload a single song###
-def download_single(url, output_folder="downloads/playlist"):
-    adress,songName=download_audio_raw(url)
-    convert_to_mp3(adress, songName, output_folder)
 
 if __name__ == "__main__":
-    download_single("https://music.youtube.com/watch?v=4tJKyfXCDUE&si=aT8MPsNeI_7kDeWa")
+    download_audio("https://music.youtube.com/watch?v=4tJKyfXCDUE&si=aT8MPsNeI_7kDeWa")
