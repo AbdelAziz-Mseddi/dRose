@@ -15,19 +15,22 @@ import yt_dlp
 def get_playlist_info(url):
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         plInfo=ydl.extract_info(url, download=False)
-        print(f"Playlist Title: {plInfo.get('title')}")
-        print(f"Uploader: {plInfo.get('uploader')}")
-        print(f"Track Count: {plInfo.get('playlist_count')}")
+        # print(f"Playlist Title: {plInfo.get('title')}")
+        # print(f"Uploader: {plInfo.get('uploader')}")
+        # print(f"Track Count: {plInfo.get('playlist_count')}")
         if 'entries' in plInfo:
-            print("\nTrack List:")
-            for track in plInfo['entries']:
-                print(f"╠ {track.get('title')}, ID={track.get('id')}")
-    res={
-        "title":plInfo.get('title'),
-        "size":plInfo.get('playlist_count'),
-        "tracks":[track.get('title') for track in plInfo['entries']]
-    }
-    print(res)
+            # print("\nTrack List:")
+            # for track in plInfo['entries']:
+            #     print(f"╠ {track.get('title')}, ID={track.get('id')}")
+            res={
+                "uploader":plInfo.get('uploader'),
+                "title":plInfo.get('title'),
+                "size":plInfo.get('playlist_count'),
+                "tracks":[track.get('title') for track in plInfo['entries']]
+            }
+            # print(res)
+        else:
+            res=None
     return res
 
 ###Return a list of URLs for all songs in the playlist###
