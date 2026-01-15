@@ -20,6 +20,7 @@ ydl_opts = {
 
 def download_audio(url, output_folder=".", audio_format="mp3"):
     os.makedirs(output_folder, exist_ok=True)
+    audio_format=audio_format.lower()
     opts = {**ydl_opts,
             'outtmpl': os.path.join(output_folder, '%(title)s.%(ext)s'),
             'postprocessors': [{
