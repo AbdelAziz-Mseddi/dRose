@@ -1,5 +1,6 @@
 import typer
 import core.playlist as down
+import core.utils as util
 from rich.console import Console
 from pathlib import Path
 app=typer.Typer(
@@ -31,4 +32,5 @@ def point_info(url : str = typer.Argument(..., help="lien URL de la playlist vis
     console.print("[#6594B1]ø Number of Tracks: [/#6594B1]", box["size"])
     console.print("[#6594B1]ø Track List: [/#6594B1]")
     for track in box["tracks"]:
-        console.print(f"  [#DDAED3]╠{track}[/#DDAED3]")
+        console.print(f"  [#DDAED3]╠ {track[0]} [#B0FFFA]・゜゜・．[#B0FFFA]{util.format_duration(track[1])} [/#DDAED3]")
+    console.print("🌹")

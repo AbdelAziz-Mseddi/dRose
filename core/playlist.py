@@ -23,10 +23,11 @@ def get_playlist_info(url):
             # for track in plInfo['entries']:
             #     print(f"╠ {track.get('title')}, ID={track.get('id')}")
             res={
+                "duration":plInfo.get('duration'),
                 "uploader":plInfo.get('uploader'),
                 "title":plInfo.get('title'),
                 "size":plInfo.get('playlist_count'),
-                "tracks":[track.get('title') for track in plInfo['entries']]
+                "tracks":[( track.get('title'), track.get('duration')) for track in plInfo['entries']]
             }
             # print(res)
         else:

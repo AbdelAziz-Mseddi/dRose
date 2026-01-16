@@ -76,6 +76,22 @@ def format_size(bytes):
     res=f"{noumrou:.3f}{unit}"
     return res
 
+###Format duration of song###
+def format_duration(seconds):
+    def format(n):
+        if(n//10==0):
+            return f"0{n}"
+        else :
+            return n
+    sec = seconds % 60
+    minutes = seconds // 60
+    ho = minutes // 60
+    min_ = minutes % 60
+    if ho != 0:
+        return f"{format(ho)}:{format(min_)}:{format(sec)}"
+    else :
+        return f"{format(min_)}:{format(sec)}"
+
 if __name__ == "__main__":
     s=input("donner titre de video : ")
     S=sanitize_filename(s)
