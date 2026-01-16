@@ -13,6 +13,7 @@ ydl_opts = {
     'ffmpeg_location':get_ffmpeg_path(),
     'format':"bestaudio/best",  # Format Selection: Best audio only
     'quiet': True,  # Suppress standard output
+    'no_warnings': True,  # Suppress warnings
     'ignoreerrors': True,   # Skip private/deleted videos without stopping
 }
 
@@ -29,7 +30,6 @@ def download_audio(url, output_folder=".", audio_format="mp3"):
                 'preferredquality': '192'       # bitrate
         }]}
     with yt_dlp.YoutubeDL(opts) as ydl:
-        print(f"Downloading: {url}")
         song=ydl.extract_info(url, download=True)
         filename = ydl.prepare_filename(song)
         filename= os.path.splitext(filename)[0] + "." + audio_format
