@@ -1,6 +1,7 @@
 import typer
 import core.playlist as down
 import core.utils as util
+from cli import config_store as conf
 from rich.console import Console
 from pathlib import Path
 app=typer.Typer(
@@ -13,13 +14,16 @@ console=Console()
 
 @app.command()
 def download(url : str = typer.Argument(..., help="URL link of the Wanted Playlist"),
-             output_dir : Path = typer.Option(Path("."), "--output_dir", "-o", help="Output Folder (Default: Current Directory)"),
-             audio_format : str = typer.Option("mp3", "--format", "-f", help="Audio Format (Default: MP3)")
+             output_dir : Path | None = typer.Option(None, "--output_dir", "-o", help="Output folder; defaults from config"),
+             audio_format : str | None = typer.Option(None, "--format", "-f", help="Audio format; defaults from config")
              ):
     """download your favorite playlist"""
     console.print("[bold green]Starting download...🌹[/bold green]")
     console.print(f"URL: {url}")
-    down.download_playlist(url, output_dir, audio_format)
+    cfg = conf.get_config()
+    eff_output = str(output_dir) if output_dir is not None else cfg.get("output_folder", ".")
+    eff_format = audio_format if audio_format is not None else cfg.get("audio_format", "mp3")
+    down.download_playlist(url, eff_output, eff_format)
     console.print("[bold green]🌹 Download complete![/bold green]")
 
 @app.command()
