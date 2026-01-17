@@ -27,7 +27,7 @@ def get_playlist_info(url):
                 "uploader":plInfo.get('uploader'),
                 "title":plInfo.get('title'),
                 "size":plInfo.get('playlist_count'),
-                "tracks":[( track.get('title'), track.get('duration')) for track in plInfo['entries']]
+                "tracks":[( track.get('title'), track.get('duration'), track.get('uploader')) for track in plInfo['entries']]
             }
             # print(res)
         else:

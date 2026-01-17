@@ -56,12 +56,12 @@ def zip_folder(folder_path, output_path):
 def format_size(bytes):
     bina=bin(bytes)
     anib=bina[2:]
-    print(anib)
+    # print(anib)
     longu=len(anib)
-    print(longu)
+    # print(longu)
     puiss=0
     for i in range(longu-1,-1,-1):
-        print(anib[i],i)
+        # print(anib[i],i)
         if (longu-1-i)%10==0:
             puiss=longu-1-i
     noumrou=bytes/2**puiss
