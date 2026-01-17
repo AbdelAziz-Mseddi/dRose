@@ -13,7 +13,7 @@ app=typer.Typer(
 console=Console()
 
 @app.command()
-def download(url : str = typer.Argument(..., help="URL link of the Wanted Playlist"),
+def download(url : str = typer.Argument(..., help="URL link of the Wanted Playlist(type between \"url\")"),
              output_dir : Path | None = typer.Option(None, "--output_dir", "-o", help="Output folder; defaults from config"),
              audio_format : str | None = typer.Option(None, "--format", "-f", help="Audio format; defaults from config")
              ):
