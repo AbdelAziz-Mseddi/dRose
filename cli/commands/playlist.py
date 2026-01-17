@@ -23,7 +23,7 @@ def download(url : str = typer.Argument(..., help="URL link of the Wanted Playli
     console.print("[bold green]🌹 Download complete![/bold green]")
 
 @app.command()
-def point_info(url : str = typer.Argument(..., help="lien URL de la playlist visée"),
+def point_info(url : str = typer.Argument(..., help="URL link of the Wanted Playlist"),
                all: bool = typer.Option(False, "--all", "-a", help="show duration and estimated size of playlist and songs")):
     """informations of the playlist"""
     box=down.get_playlist_info(url)
