@@ -92,6 +92,27 @@ def format_duration(seconds):
     else :
         return f"{format(min_)}:{format(sec)}"
 
+###Format date from YYYYMMDD to DDth of MM, YYYY###
+def format_date(date):
+    terminaison= {
+        '1':"st",
+        '2':"nd",
+        '3':"rd"
+    }
+    day=date[-2::]
+    month=date[-4:-2]
+    year=date[0:4]
+    final_form=day
+    if( day[1] in terminaison ):
+        final_form+=terminaison[day[1]]
+    else:
+        final_form+="th"
+    final_form+=" of"
+    month_names = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"]
+    final_form+=f" {month_names[int(month)]},"
+    final_form+=f" {year}"
+    return final_form
+
 if __name__ == "__main__":
     s=input("donner titre de video : ")
     S=sanitize_filename(s)
