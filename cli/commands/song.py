@@ -39,9 +39,8 @@ def point_info(url : str = typer.Argument(..., help="URL link of the Wanted Play
     console.print("[#B8DB80]Point Info on your beloved Song🌹[/#B8DB80]")
     console.print("[#F7F6D3]ø Song Title: [/#F7F6D3]", box["title"])
     artist=box["uploader"]
-    wiw=set(["-", "Topic"])
-    if( check_topic(artist) ):
-        artist="".join( list (set( artist.split() ) - wiw) )
+    if (artist.endswith("- Topic")):
+        artist=artist.replace("- Topic", "").rstrip()
     console.print("[#F7F6D3]ø Uploader Username: [/#F7F6D3]", artist)
     console.print("[#F7F6D3]ø Song Duration: [/#F7F6D3]", util.format_duration(box["duration"]))
     if (all):
@@ -49,16 +48,3 @@ def point_info(url : str = typer.Argument(..., help="URL link of the Wanted Play
         console.print("[#FFE4EF]ø Release Date: [/#FFE4EF]", box["date"])
         pass
     console.print("[#F39EB6]🌹 See you, Space Cowboy...[/#F39EB6]")
-
-def check_topic(artist):
-    words=artist.split()
-    res=False
-    for word in words:
-        if(word=="-"):
-            res=True
-            continue
-        if(word=="Topic"):
-            return res
-        else:
-            res=False
-    return False
