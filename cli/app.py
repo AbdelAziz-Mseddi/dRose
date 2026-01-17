@@ -2,7 +2,7 @@ import typer
 from rich.console import Console
 from rich.table import Table
 from rich.progress import Progress, SpinnerColumn
-from cli.commands import config, doctor, playlist
+from cli.commands import config, doctor, playlist, song
 
 console=Console()
 #drose root command
@@ -15,6 +15,8 @@ app=typer.Typer(name="drose",
 app.add_typer(config.app, name="config", help="Manage Configurations")
 app.add_typer(doctor.app, name="doctor", help="Check System Requirements")
 app.add_typer(playlist.app, name="playlist", help="Download and Manage Playlists")
+app.add_typer(song.app, name="song", help="Download and Manage Songs")
+
 
 main=app
 

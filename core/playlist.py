@@ -52,7 +52,9 @@ def get_song_info(url):
         res={
             'title':songInfo.get('title'),
             'duration':songInfo.get('duration'),
-            'uploader':songInfo.get('uploader')
+            'uploader':songInfo.get('uploader'),
+            'view': songInfo.get('view_count'),
+            'date': songInfo.get('upload_date')
         }
     return res
 
