@@ -103,13 +103,15 @@ def format_date(date):
     month=date[-4:-2]
     year=date[0:4]
     final_form=day
-    if( day[1] in terminaison ):
+    if(day=="13"):
+        final_form+="13th"
+    elif( day[1] in terminaison ):
         final_form+=terminaison[day[1]]
     else:
         final_form+="th"
     final_form+=" of"
     month_names = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"]
-    final_form+=f" {month_names[int(month)]},"
+    final_form+=f" {month_names[int(month)-1]},"
     final_form+=f" {year}"
     return final_form
 

@@ -44,7 +44,6 @@ def point_info(url : str = typer.Argument(..., help="URL link of the Wanted Play
     console.print("[#F7F6D3]ø Uploader Username: [/#F7F6D3]", artist)
     console.print("[#F7F6D3]ø Song Duration: [/#F7F6D3]", util.format_duration(box["duration"]))
     if (all):
-        console.print("[#FFE4EF]ø View Count: [/#FFE4EF]", box["view"])
         console.print("[#FFE4EF]ø Release Date: [/#FFE4EF]", util.format_date(box["date"]))
-        pass
+        console.print("[#FFE4EF]ø Estimated Size: [/#FFE4EF]", util.format_size(box["duration"]*192//8))
     console.print("[#F39EB6]🌹 See you, Space Cowboy...[/#F39EB6]")
