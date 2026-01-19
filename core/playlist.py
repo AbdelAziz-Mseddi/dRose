@@ -6,6 +6,7 @@ ydl_opts = {
         'extract_flat': True,   # Don't download videos, just get valid URLs/titles
         'dump_single_json': True,   # mimic the JSON output format
         'quiet': True,  # Suppress standard output
+        'no_warnings': True,  # Suppress warnings
         'ignoreerrors': True,   # Skip private/deleted videos without stopping
     }
 
