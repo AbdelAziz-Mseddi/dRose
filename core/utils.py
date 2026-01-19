@@ -46,10 +46,15 @@ def create_folder(playPath,path="downloads"):
 import os
 import zipfile
 ###Bundle multiple songs into a ZIP###
-def zip_folder(folder_path, output_path):
+def zip_folder(folder_path, output_name=None):
     music=[f"{folder_path}/{track}" for track in os.listdir(folder_path)]
-    print(music)
-    with zipfile.ZipFile(output_path, 'w', compression=zipfile.ZIP_DEFLATED) as zipf:
+    folder_name = os.path.basename(folder_path)
+    # print(music)
+    if output_name is None:
+        output_name = f"{folder_name}.zip"  
+    elif not output_name.endswith('.zip'):
+        output_name += '.zip'  
+    with zipfile.ZipFile(output_name, 'w', compression=zipfile.ZIP_DEFLATED) as zipf:
         list(map(zipf.write, music))
 
 ###Convert bytes to human-readable strings###
