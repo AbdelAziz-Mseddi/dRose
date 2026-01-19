@@ -8,6 +8,7 @@ console=Console()
 #drose root command
 app=typer.Typer(name="drose",
                 no_args_is_help=False,
+                add_completion=False,
                 help="[#8A244B]drose[/#8A244B], [#5B23FF]your music companion :3[/#5B23FF]",
                 )
 
@@ -75,17 +76,15 @@ def print_welcome():
 
 @app.callback(invoke_without_command=True)
 def main(
-    ctx: typer.Context ,
+    ctx: typer.Context,
     version: bool = typer.Option(False, "--version", help="Show version"),
-    help: bool = typer.Option(False, "--help", help="Show help", is_eager=True),
 ):
     """
-    drose - Your CLI tool description
+    drose :3
     """
-    # Only show welcome if no command and no help/version flags
-    if ctx.invoked_subcommand is None and not version and not help:
+    # Only show welcome if no command and no version flag
+    if ctx.invoked_subcommand is None and not version:
         print_welcome()
-    
     if version:
         typer.echo("drose v0.1.0")
 
