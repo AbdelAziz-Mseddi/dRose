@@ -49,4 +49,4 @@ def point_info(url : str = typer.Argument(..., help="URL link of the Wanted Play
     if(not all):
         console.print("🌹")
     else:
-        console.print("🌹 Total Duration: ",util.format_duration(totDur), "ø Estimated Total Size: ", util.format_size(totDur*192//8))
+        console.print("🌹 Total Duration: ",util.format_duration(totDur), " ø Estimated Total Size: ", util.format_size(totDur*192//8))
