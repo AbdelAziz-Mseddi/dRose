@@ -39,7 +39,10 @@ def point_info(url : str = typer.Argument(..., help="URL link of the Wanted Play
     totDur=0
     for track in box["tracks"]:
         if(all):
-            console.print(f"  [#DDAED3]╠ {track[0]}[/#DDAED3], [#FFDAB3]{track[2]}[/#FFDAB3][#B0FFFA]・゜゜・．{util.format_duration(track[1])}[/#B0FFFA] [#F5FBE6] ◁◁ ▐ ▌ ▷▷ {util.format_size(track[1]*192//8)}[/#F5FBE6]")
+            artist=track[2]
+            if (artist.endswith("- Topic")):
+                artist=artist.replace("- Topic", "").rstrip()
+            console.print(f"  [#DDAED3]╠ {track[0]}[/#DDAED3], [#FFDAB3]{artist}[/#FFDAB3][#B0FFFA]・゜゜・．{util.format_duration(track[1])}[/#B0FFFA] [#F5FBE6] ◁◁ ▐ ▌ ▷▷ {util.format_size(track[1]*192//8)}[/#F5FBE6]")
         else:
             console.print(f"  [#DDAED3]╠ {track[0]} [/#DDAED3]")
         totDur+=track[1]
