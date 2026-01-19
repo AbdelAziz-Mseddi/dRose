@@ -21,8 +21,8 @@ def download(url : str = typer.Argument(..., help="URL link of the Wanted Playli
     console.print("[bold green]Starting download...🌹[/bold green]")
     console.print(f"URL: {url}")
     cfg = conf.get_config()
-    eff_output = str(output_dir) if output_dir is not None else cfg.get("output_folder", ".")
-    eff_format = audio_format if audio_format is not None else cfg.get("audio_format", "mp3")
+    eff_output = str(output_dir) if output_dir is not None else cfg[0].get("output_folder", ".")
+    eff_format = audio_format if audio_format is not None else cfg[0].get("audio_format", "mp3")
     down.download_playlist(url, eff_output, eff_format)
     console.print("[bold green]🌹 Download complete![/bold green]")
 
