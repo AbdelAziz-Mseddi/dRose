@@ -2,9 +2,10 @@ import typer
 from rich.console import Console
 from rich.table import Table
 from rich.progress import Progress, SpinnerColumn
-from cli.commands import config, doctor, song
-from core.utils import zip_folder,format_duration, format_size
-from core.playlist import download_playlist, get_playlist_info
+from cli.commands import config, doctor
+from core.utils import zip_folder,format_duration, format_size, format_date
+from core.playlist import download_playlist, get_playlist_info, get_song_info
+from core.downloader import download_audio
 from cli import config_store as defConf
 from pathlib import Path
 from cli import config_store as conf
@@ -21,8 +22,6 @@ app=typer.Typer(name="drose",
 #adding the precious commands
 app.add_typer(config.app, name="config", help="Manage Configurations")
 app.add_typer(doctor.app, name="doctor", help="Check System Requirements")
-app.add_typer(song.app, name="song", help="Download and Manage Songs")
-
 
 console=Console()
 def print_welcome():
@@ -146,6 +145,40 @@ def playlist(
         eff_format = audio_format if audio_format is not None else cfg[0].get("audio_format", "mp3")
         download_playlist(url, eff_output, eff_format)
         console.print("[bold green]🌹 Download complete![/bold green]")
+
+@app.command()
+def song(url : str = typer.Argument(..., help="URL link of the Wanted Song"),
+    alll : bool = typer.Option(False, "--all", "-a", help="show additional info (release date, estimated size)"),
+    listt : bool = typer.Option(False, "--list", "-l", help="show song information without downloading"),
+    output_dir : Path | None = typer.Option(None, "--output_dir", "-o", help="Output folder; defaults from config"),
+    audio_format : str | None = typer.Option(None, "--format", "-f", help="Audio format; defaults from config")
+):
+    """Download and Manage Songs"""
+    if(listt):
+        box=get_song_info(url)
+        console.print("[#B8DB80]Point Info on your beloved Song🌹[/#B8DB80]")
+        console.print("[#F7F6D3]ø Song Title: [/#F7F6D3]", box["title"])
+        artist=box["uploader"]
+        if (artist.endswith("- Topic")):
+            artist=artist.replace("- Topic", "").rstrip()
+        console.print("[#F7F6D3]ø Uploader Username: [/#F7F6D3]", artist)
+        console.print("[#F7F6D3]ø Song Duration: [/#F7F6D3]", format_duration(box["duration"]))
+        if (alll):
+            console.print("[#FFE4EF]ø Release Date: [/#FFE4EF]", format_date(box["date"]))
+            console.print("[#FFE4EF]ø Estimated Size: [/#FFE4EF]", format_size(box["duration"]*192//8))
+        console.print("[#F39EB6]🌹 See you, Space Cowboy...[/#F39EB6]")
+    else:
+        # Download song
+        console.print("[bold green]Starting download...🌹[/bold green]")
+        console.print(f"URL: {url}")
+        cfg = conf.get_config()
+        eff_output = str(output_dir) if output_dir is not None else cfg[0].get("output_folder", ".")
+        eff_format = audio_format if audio_format is not None else cfg[0].get("audio_format", "mp3")
+        adress,name=download_audio(url, eff_output, eff_format)
+        console.print("[#F6F0D7]🌹 Download complete![/#F6F0D7]")
+        console.print("[#C5D89D] 🌹 File Name: [/#C5D89D]", name)
+        console.print("[#9CAB84]  🌹 Location : [/#9CAB84]", adress)
+        console.print("[#89986D]   🌹 See you around, Officer (^_~)[/#89986D]")
 
 if __name__ == "__main__":
     app()
