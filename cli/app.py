@@ -65,6 +65,7 @@ def print_welcome():
     typer.echo(typer.style("Quick start:", fg=typer.colors.BLUE, bold=True))
     typer.echo("  drose --help     Show all commands")
     typer.echo("  drose [command]  Run a specific command")
+    typer.echo("  drose [squint]  [your] [eyes] -:3")
     typer.echo()
 
 @app.callback(invoke_without_command=True)
