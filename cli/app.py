@@ -112,8 +112,8 @@ def playlist(
     url : str = typer.Argument(..., help="URL link of the Wanted Playlist"),
     output_dir : Path | None = typer.Option(None, "--output_dir", "-o", help="Output folder; defaults from config"),
     audio_format : str | None = typer.Option(None, "--format", "-f", help="Audio format; defaults from config"),
-    alll : bool = typer.Option(False, "--all", "-a", help="show duration, estimated size of playlist and songs, song artist"),
-    listt : bool = typer.Option(False, "--list", "-l", help="list playlist songs + informations")
+    alll : bool = typer.Option(False, "--all", "-a", help="Show Duration, Estimated Size of Playlist and Songs, Artists"),
+    listt : bool = typer.Option(False, "--list", "-l", help="List Songs + Informations")
 ):
     """Download and Manage Playlists"""
     if(listt):
@@ -148,8 +148,8 @@ def playlist(
 
 @app.command()
 def song(url : str = typer.Argument(..., help="URL link of the Wanted Song"),
-    alll : bool = typer.Option(False, "--all", "-a", help="show additional info (release date, estimated size)"),
-    listt : bool = typer.Option(False, "--list", "-l", help="show song information without downloading"),
+    alll : bool = typer.Option(False, "--all", "-a", help="Show additional Info (Release Date, Estimated Size)"),
+    listt : bool = typer.Option(False, "--list", "-l", help="Show song Information without Downloading"),
     output_dir : Path | None = typer.Option(None, "--output_dir", "-o", help="Output folder; defaults from config"),
     audio_format : str | None = typer.Option(None, "--format", "-f", help="Audio format; defaults from config")
 ):
