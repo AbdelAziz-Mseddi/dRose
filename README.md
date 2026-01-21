@@ -13,8 +13,7 @@
 
 ---
 
-A **Python-based project** to download **YouTube Music songs and playlists** in one click.  
-Includes both a **web app** (FastAPI) and a **command-line interface (CLI)**.
+A **Python-based CLI tool** to download **YouTube Music songs and playlists** in one click.
 
 ---
 
@@ -22,11 +21,10 @@ Includes both a **web app** (FastAPI) and a **command-line interface (CLI)**.
 
 - Download **single songs** or **entire playlists**  
 - Choose **audio format** (`mp3`, `m4a`, etc.)  
-- **Web interface** for easy usage  
 - **CLI** for quick terminal downloads  
 - Automatic **audio conversion** with **ffmpeg**  
 - Optionally bundle multiple songs into a **ZIP file**  
-- Progress bar support in CLI using **tqdm**
+- Progress bar support using **tqdm**
 
 ---
 
@@ -35,13 +33,8 @@ Includes both a **web app** (FastAPI) and a **command-line interface (CLI)**.
 - **Python 3.10+** – main language  
 - **yt-dlp** – core YouTube downloader  
 - **ffmpeg** – audio conversion and processing  
-- **FastAPI** – backend web framework 
 - **imageio-ffmpeg** – Bundled FFmpeg binary (No installation required)
-- **Uvicorn** – ASGI server for FastAPI  
-- **Jinja2** – HTML templates for frontend  
-- **TQDM** – CLI progress bars  
-- **Python-multipart** – form data handling  
-- **Pydantic** – request validation for API
+- **TQDM** – CLI progress bars
 
 ---
 
@@ -74,17 +67,11 @@ pip install -r requirements.txt
 
 ## 🌐 Usage
 
-### Web App
-
-cd web
-uvicorn app:app --reload
-
-- Open your browser at `http://127.0.0.1:8000`
-- Paste your playlist or song URL, select format, and download 🎶
-
 ### CLI
 
-python cli/cli.py --playlist "PLAYLIST_URL" --format mp3
+```bash
+drose playlist "PLAYLIST_URL" --format mp3
+```
 
 - Download playlists directly from the terminal
 - See progress bars for download status
@@ -94,28 +81,34 @@ python cli/cli.py --playlist "PLAYLIST_URL" --format mp3
 ## 📁 Project Structure
 
 ```text
-youtube_downloader/
+dRose/
 │
-├── assets/             # Project assets (logos, iamges)
+├── assets/             # Project assets (logos, images)
+│
+├── cli/                # Command-line interface
+│   ├── app.py          # Main CLI entry point
+│   ├── config_store.py # Configuration management
+│   ├── config.default.json
+│   └── commands/       # CLI command modules
+│       ├── config.py   # Config command
+│       └── doctor.py   # Doctor command
 │
 ├── core/               # Core functionality and business logic
+│   ├── __init__.py
 │   ├── downloader.py   # Main YouTube downloader using yt-dlp
 │   ├── playlist.py     # Playlist parsing and extraction
 │   └── utils.py        # Utility functions
 │
-├── cli/                # Command-line interface
-│   └── cli.py          # Main CLI entry point
-│
-├── web/                # Web application
-│   ├── app.py          # FastAPI application
-│   ├── templates/      # HTML templates
-│   └── static/         # CSS and JS files
-│
-├── downloads/          # Folder for downloaded files
-├── venv/               # Virtual environment (ignored in Git)
+├── pyproject.toml      # Project configuration
 ├── requirements.txt    # Python dependencies
 └── README.md           # Project documentation
 ```
+---
+
+## 📋 Future Plans
+
+- **Web interface** – A FastAPI-based web app is planned for future releases
+
 ---
 
 ## ⚠️ Notes

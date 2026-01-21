@@ -6,7 +6,13 @@ app=typer.Typer(
     add_completion=False
 )
 
-@app.command()
+supportedOS={
+    "windows":{"min": 7},
+    "linux": 1,
+    "Darwin": {"min": 10.9} #macOS
+}
+
+@app.command(invoke_without_command=True)
 def check():
     """check system requirements"""
     pass
