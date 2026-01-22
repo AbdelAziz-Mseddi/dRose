@@ -2,6 +2,7 @@ import typer
 import platform
 from rich.console import Console
 import sys
+import importlib.metadata
 
 app=typer.Typer(
     name="doctor",
@@ -25,13 +26,17 @@ def check():
     archi=platform.architecture()[0]
     con=True
     if (archi is not "64bit"):
-        console.print("[#b22222]✖ Architecture not supported. Please use 64-bit.[/#b22222]")
+        console.print("[#b22222]✖ Architecture not supported. Please use 64-bit[/#b22222]")
         con=False
+    else :
+        console.print("[#347c17]☑ System Architecture is supported[/#347c17]")
     if( supportedOS[os_name].get("tested") and os_release < supportedOS[os_name].get("min") ):
-        console.print(f"[#b22222]✖ {os_name} release not supported. Please upgrade to {supportedOS[os_name].get("min")} minimum.[/#b22222]")
+        console.print(f"[#b22222]✖ {os_name} release not supported. Please upgrade to {supportedOS[os_name].get("min")} minimum[/#b22222]")
         con=False
     elif ( not supportedOS[os_name].get("tested") ):
-        console.print(f"[#ffd700 ]⚠ Proceed with caution, untested OS[/#ffd700 ]")
+        console.print("[#ffd700 ]⚠ Proceed with caution, untested OS[/#ffd700 ]")
+    else :
+        console.print("☑ Operating System is supported")
     #check Python interpreter
     min_major=3
     min_minor=9
@@ -39,27 +44,46 @@ def check():
     major=version_tuple.major
     minor=version_tuple.minor
     if( major < min_major ):
-        console.print("[#b22222]✖ Python version not supported. Minimum version is <3.9>.[/#b22222]")
+        console.print("[#b22222]✖ Python version not supported. Minimum version is <3.9>[/#b22222]")
         con=False
     elif( minor < min_minor ):
-        console.print("[#b22222]✖ Python version not supported. Minimum version is <3.9>.[/#b22222]")
+        console.print("[#b22222]✖ Python version not supported. Minimum version is <3.9>[/#b22222]")
         con=False
-    #check python packages (requirements)
-    packages = [
-    "typer",
-    "rich",
-    "yt-dlp",
-    "imageio-ffmpeg",
-    "tqdm",
-    "python-multipart",
-    "PyExecJS"
-    ]
+    #check python packages (requirements) are imported
+    packages = {
+        "typer": ["0.9.0", "1.0.0", False],   #(min, max, import successful)
+        "rich": ["13.7.0", "14.0.0", False],
+        "yt-dlp": ["2024.11.18", "2026.0.0", False],
+        "imageio-ffmpeg": ["0.4.9", "0.5.0", False],
+        "tqdm": ["4.66.1", "4.66.1", False], 
+        "python-multipart": ["0.0.9", "0.0.10", False],
+        "PyExecJS": ["1.5.1", "1.6.0",  False]
+    }
     for package in packages:
         try:
             __import__(package)
+            packages[package][2]=True
         except ImportError as e:
-            console.print(f"[#b22222]✖ Required package missing. Please install {package}.[/#b22222]")
+            console.print(f"[#b22222]✖ Required package missing. Please install {package}[/#b22222]")
             con=False
+    #check python packages versions
+    for package in packages:
+        if packages[package][2]:
+            act_ver=parse_version( importlib.metadata.version(package) )
+            min_ver=parse_version( packages[package][0] )
+            max_ver=packages[package][1]
+            if(min_ver==max_ver):
+                if( act_ver!=min_ver ):
+                    console.print(f"[#b22222]⚠ {package} version may cause problems. Recommended vesion= {packages[package][0]}[/#b22222]")                
+                else:
+                    console.print(f"[#b22222]☑ {package} is installed, version is compatible.[/#b22222]")
+            elif(act_ver<min_ver or act_ver>max_ver):
+                console.print(f"[#b22222]⚠ {package} version may cause problems. Recommended version <= {packages[package][0]} and > {packages[package][1]} [/#b22222]")
+            else:
+                console.print(f"[#b22222]☑ {package} is installed, version is compatible.[/#b22222]")
     if (con==False):
         raise typer.Exit(code=1)
-    
+
+#parse version to compare    
+def parse_version(version):
+    return tuple(map(int, version.split(".")))
