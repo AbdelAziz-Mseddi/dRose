@@ -6,9 +6,7 @@ import importlib.metadata
 
 app=typer.Typer(
     name="doctor",
-    help="i am here to check your device's compatibility for Top-Tier Music :p",
-    no_args_is_help=True,
-    add_completion=False
+    help="i am here to check your device's compatibility for Top-Tier Music :p"
 )
 console=Console()
 supportedOS={
@@ -17,7 +15,7 @@ supportedOS={
     "Darwin": {"tested": True, "min": 10.9} #macOS
 }
 
-@app.command(invoke_without_command=True)
+@app.callback(invoke_without_command=True)
 def check():
     """check system requirements"""
     #check system architecture and operating system
@@ -25,7 +23,7 @@ def check():
     os_release=platform.release()
     archi=platform.architecture()[0]
     con=True
-    if (archi is not "64bit"):
+    if (archi != "64bit"):
         console.print("[#b22222]✖ Architecture not supported. Please use 64-bit[/#b22222]")
         con=False
     else :
@@ -34,9 +32,9 @@ def check():
         console.print(f"[#b22222]✖ {os_name} release not supported. Please upgrade to {supportedOS[os_name].get("min")} minimum[/#b22222]")
         con=False
     elif ( not supportedOS[os_name].get("tested") ):
-        console.print("[#ffd700 ]⚠ Proceed with caution, untested OS[/#ffd700 ]")
+        console.print("[#ffd700]⚠ Proceed with caution, untested OS[/#ffd700]")
     else :
-        console.print("☑ Operating System is supported")
+        console.print("[#347c17]☑ Operating System is supported[/#347c17]")
     #check Python interpreter
     min_major=3
     min_minor=9
@@ -74,13 +72,13 @@ def check():
             max_ver=packages[package][1]
             if(min_ver==max_ver):
                 if( act_ver!=min_ver ):
-                    console.print(f"[#b22222]⚠ {package} version may cause problems. Recommended vesion= {packages[package][0]}[/#b22222]")                
+                    console.print(f"[#ffd700]⚠ {package} version may cause problems. Recommended vesion= {packages[package][0]}[/#ffd700]")                
                 else:
-                    console.print(f"[#b22222]☑ {package} is installed, version is compatible.[/#b22222]")
+                    console.print(f"[#347c17]☑ {package} is installed, version is compatible.[/#347c17]")
             elif(act_ver<min_ver or act_ver>max_ver):
-                console.print(f"[#b22222]⚠ {package} version may cause problems. Recommended version <= {packages[package][0]} and > {packages[package][1]} [/#b22222]")
+                console.print(f"[#ffd700]⚠ {package} version may cause problems. Recommended version <= {packages[package][0]} and > {packages[package][1]} [/#ffd700]")
             else:
-                console.print(f"[#b22222]☑ {package} is installed, version is compatible.[/#b22222]")
+                console.print(f"[#347c17]☑ {package} is installed, version is compatible.[/#347c17]")
     if (con==False):
         raise typer.Exit(code=1)
 
