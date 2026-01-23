@@ -10,8 +10,8 @@ app=typer.Typer(
 )
 console=Console()
 supportedOS={
-    "windows":{"tested": True, "min": 7},
-    "linux": {"tested": False, "min": 112263},#i am the best mini-series, who am i? :p
+    "Windows":{"tested": True, "min": 7},
+    "Linux": {"tested": False, "min": 112263},#i am the best mini-series, who am i? :p
     "Darwin": {"tested": True, "min": 10.9} #macOS
 }
 
@@ -28,7 +28,7 @@ def check():
         con=False
     else :
         console.print("[#347c17]☑ System Architecture is supported[/#347c17]")
-    if( supportedOS[os_name].get("tested") and os_release < supportedOS[os_name].get("min") ):
+    if( supportedOS[os_name].get("tested") and int(os_release) < supportedOS[os_name].get("min") ):
         console.print(f"[#b22222]✖ {os_name} release not supported. Please upgrade to {supportedOS[os_name].get("min")} minimum[/#b22222]")
         con=False
     elif ( not supportedOS[os_name].get("tested") ):
@@ -42,41 +42,43 @@ def check():
     major=version_tuple.major
     minor=version_tuple.minor
     if( major < min_major ):
-        console.print("[#b22222]✖ Python version not supported. Minimum version is <3.9>[/#b22222]")
+        console.print("[#b22222]✖ Python version not supported. Minimum version is <3.9>.[/#b22222]")
         con=False
     elif( minor < min_minor ):
-        console.print("[#b22222]✖ Python version not supported. Minimum version is <3.9>[/#b22222]")
+        console.print("[#b22222]✖ Python version not supported. Minimum version is <3.9>.[/#b22222]")
         con=False
+    else:
+        console.print(f"[#347c17]☑ Your Python version is supported.[/#347c17]")
     #check python packages (requirements) are imported
     packages = {
-        "typer": ["0.9.0", "1.0.0", False],   #(min, max, import successful)
-        "rich": ["13.7.0", "14.0.0", False],
-        "yt-dlp": ["2024.11.18", "2026.0.0", False],
-        "imageio-ffmpeg": ["0.4.9", "0.5.0", False],
-        "tqdm": ["4.66.1", "4.66.1", False], 
-        "python-multipart": ["0.0.9", "0.0.10", False],
-        "PyExecJS": ["1.5.1", "1.6.0",  False]
+        "typer": ["0.9.0", "1.0.0", False, "typer"],   #(min, max, import successful, import alias)
+        "rich": ["13.7.0", "14.0.0", False, "rich"],
+        "yt-dlp": ["2024.11.18", "2026.0.0", False, "yt_dlp"], 
+        "imageio-ffmpeg": ["0.4.9", "0.5.0", False, "imageio_ffmpeg"],
+        "tqdm": ["4.66.1", "4.66.1", False, "tqdm"], 
+        "python-multipart": ["0.0.9", "0.0.10", False, "multipart"],
+        "PyExecJS": ["1.5.1", "1.6.0",  False, "execjs"] 
     }
-    for package in packages:
+    for package in packages.keys():
         try:
-            __import__(package)
+            __import__(packages[package][3])
             packages[package][2]=True
         except ImportError as e:
-            console.print(f"[#b22222]✖ Required package missing. Please install {package}[/#b22222]")
+            console.print(f"[#b22222]✖ Required package missing. Please install {package}.[/#b22222]")
             con=False
     #check python packages versions
     for package in packages:
         if packages[package][2]:
             act_ver=parse_version( importlib.metadata.version(package) )
             min_ver=parse_version( packages[package][0] )
-            max_ver=packages[package][1]
+            max_ver=parse_version( packages[package][1] )
             if(min_ver==max_ver):
                 if( act_ver!=min_ver ):
-                    console.print(f"[#ffd700]⚠ {package} version may cause problems. Recommended vesion= {packages[package][0]}[/#ffd700]")                
+                    console.print(f"[#ffd700]⚠ {package} version may cause problems. Recommended vesion= {packages[package][0]}.[/#ffd700]")                
                 else:
                     console.print(f"[#347c17]☑ {package} is installed, version is compatible.[/#347c17]")
             elif(act_ver<min_ver or act_ver>max_ver):
-                console.print(f"[#ffd700]⚠ {package} version may cause problems. Recommended version <= {packages[package][0]} and > {packages[package][1]} [/#ffd700]")
+                console.print(f"[#ffd700]⚠ {package} version may cause problems. Recommended version <= {packages[package][0]} and > {packages[package][1]}.[/#ffd700]")
             else:
                 console.print(f"[#347c17]☑ {package} is installed, version is compatible.[/#347c17]")
     if (con==False):
