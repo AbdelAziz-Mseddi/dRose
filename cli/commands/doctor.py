@@ -85,6 +85,28 @@ def check():
                 console.print(f"[#ffd700]⚠  {package} version may cause problems. Recommended version >= {packages[package][0]} and < {packages[package][1]}.[/#ffd700]")
             else:
                 console.print(f"[#347c17]☑  {package} is installed, version is compatible.[/#347c17]")
+    #testing typer
+    console.print("[CHECKING PYTHON LIBRAIRIES WORK]")
+    try:
+        import typer
+        app=typer.Typer(name="ozymandias")
+        @app.command()
+        def bcs(name: str, sad: bool = False):
+            quote=f"There are so many stars visible in New Mexico,{name}. I will walk out there to get a better look." if sad else f"I travel in worlds you can't even imagine, {name}! You can't conceive of what I'm capable of! I'm so far beyond you! I'm like a god in human clothing! Lightning bolts shoot from my fingertips!"
+            typer.echo(quote)
+        from typer.testing import CliRunner
+        runner=CliRunner()
+        result=runner.invoke(app,["kim", "--sad"])
+        if("There are so many stars visible in New Mexico,kim. I will walk out there to get a better look." in result.stdout):
+            console.print(f"[#347c17]☑  Typer runs correctly.[/#347c17]")
+        else:
+           console.print(f"[#ffd700]⚠  Typer runs but there may be problems.[/#ffd700]")
+    except Exception as e:
+            console.print(f"[#b22222]✖  Typer isn't running correctly.[/#b22222]")
+    #testing rich
+    console.print(f"[#347c17]☑  You are seeing colored output, so Rich probably works correctly.[/#347c17]")
+    #testing yt-dlp
+    
     if (con==False):
         raise typer.Exit(code=1)
 
