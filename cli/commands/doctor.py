@@ -106,7 +106,26 @@ def check():
     #testing rich
     console.print(f"[#347c17]☑  You are seeing colored output, so Rich probably works correctly.[/#347c17]")
     #testing yt-dlp
-    
+    try:
+        import yt_dlp
+        ydl_opts = {
+            'format':"bestaudio/best",  # Format Selection: Best audio only
+            'quiet': True,  # Suppress standard output
+            'no_warnings': True,  # Suppress warnings
+            'ignoreerrors': True,   # Skip private/deleted videos without stopping
+        }
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            song=ydl.extract_info("https://music.youtube.com/watch?v=Xr1qIqtnziI&si=cymnEC-gD6xEUZw0", download=False)
+            console.print(f"[#347c17]☑  Yt-Dlp runs correctly.[/#347c17]")
+    except Exception as e:
+        console.print(f"[#b22222]✖  Yt-Dlp isn't running correctly.[/#b22222]")
+    #testing ffmpeg
+    try:
+        import imageio_ffmpeg
+        path= imageio_ffmpeg.get_ffmpeg_exe()
+        console.print(f"[#347c17]☑  Ffmpeg runs correctly.[/#347c17]")
+    except Exception as e:
+        console.print(f"[#347c17]☑  Ffmpeg isn't running correctly.[/#347c17]")
     if (con==False):
         raise typer.Exit(code=1)
 
