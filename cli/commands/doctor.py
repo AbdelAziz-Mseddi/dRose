@@ -154,7 +154,7 @@ def check():
         except Exception as e:
             console.print(f"[#b22222]✖  Ffmpeg isn't running correctly.[/#b22222]")
     #testing permissions
-    console.print("[CHECKING filesystem & permissions]")
+    console.print("[CHECKING FILESYSTEM & PERMISSIONS]")
     import os
     try:
         os.makedirs("temp", exist_ok=True)
@@ -169,6 +169,19 @@ def check():
         console.print(f"[#347c17]☑  I can make files :).[/#347c17]")
     except:
         console.print(f"[#b22222]✖   I don't have permission to make files :(.[/#b22222]")
+    #testing network and tls
+    console.print("[CHECKING NETWORK CONNECTION]")
+    import socket, ssl
+    host="www.google.com"
+    port=443
+    timeout=5
+    try:
+        context=ssl.create_default_context()
+        with socket.create_connection( (host, port), timeout=timeout ) as sock:
+            with context.wrap_socket(sock, server_hostname=host) as ssock:
+                console.print(f"[#347c17]☑  Da device iz connected zuccessfully.[/#347c17]")
+    except:
+        console.print(f"[#b22222]✖   I couldn't connect to the network :(.[/#b22222]")
     if (con==False):
         raise typer.Exit(code=1)
 
