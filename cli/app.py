@@ -126,14 +126,15 @@ def playlist(
         console.print("[#6594B1]ø Track List: [/#6594B1]")
         totDur=0
         for track in box["tracks"]:
-            if(alll):
-                artist=track[2]
-                if (artist.endswith("- Topic")):
-                    artist=artist.replace("- Topic", "").rstrip()
-                console.print(f"  [#DDAED3]╠ {track[0]}[/#DDAED3], [#FFDAB3]{artist}[/#FFDAB3][#B0FFFA]・゜゜・．{format_duration(track[1])}[/#B0FFFA] [#F5FBE6] ◁◁ ▐ ▌ ▷▷ {format_size(track[1]*192//8)}[/#F5FBE6]")
-            else:
-                console.print(f"  [#DDAED3]╠ {track[0]} [/#DDAED3]")
-            totDur+=track[1]
+            if( track[0]!='[Deleted video]'):
+                if(alll):
+                    artist=track[2]
+                    if (artist.endswith("- Topic")):
+                        artist=artist.replace("- Topic", "").rstrip()
+                    console.print(f"  [#DDAED3]╠ {track[0]}[/#DDAED3], [#FFDAB3]{artist}[/#FFDAB3][#B0FFFA]・゜゜・．{format_duration(track[1])}[/#B0FFFA] [#F5FBE6] ◁◁ ▐ ▌ ▷▷ {format_size(track[1]*192//8)}[/#F5FBE6]")
+                else:
+                    console.print(f"  [#DDAED3]╠ {track[0]} [/#DDAED3]")
+                totDur+=track[1]
         if(not alll):
             console.print("🌹")
         else:
