@@ -103,6 +103,7 @@ def check():
            console.print(f"[#ffd700]⚠  Typer runs but there may be problems.[/#ffd700]")
     except Exception as e:
             console.print(f"[#b22222]✖  Typer isn't running correctly.[/#b22222]")
+            con=False
     #testing rich
     console.print(f"[#347c17]☑  You are seeing colored output, so Rich probably works correctly.[/#347c17]")
     #testing yt-dlp
@@ -119,6 +120,7 @@ def check():
             console.print(f"[#347c17]☑  Yt-Dlp runs correctly.[/#347c17]")
     except Exception as e:
         console.print(f"[#b22222]✖  Yt-Dlp isn't running correctly.[/#b22222]")
+        con=False
     #testing ffmpeg
     console.print("[CHECKING FFMPEG WORKS]")
     import shutil
@@ -143,6 +145,7 @@ def check():
             ffmpeg_path = None
     if not ffmpeg_path:
         console.print(f"[#b22222]✖  Ffmpeg isn't found or running correctly.[/#b22222]")
+        con=False
     else:
         try:
             import subprocess
@@ -151,8 +154,10 @@ def check():
                 console.print(f"[#347c17]☑  Ffmpeg runs correctly.[/#347c17]")
             else:
                 console.print(f"[#b22222]✖  Ffmpeg isn't running correctly.[/#b22222]")
+                con=False
         except Exception as e:
             console.print(f"[#b22222]✖  Ffmpeg isn't running correctly.[/#b22222]")
+            con=False
     #testing permissions
     console.print("[CHECKING FILESYSTEM & PERMISSIONS]")
     import os
@@ -161,6 +166,7 @@ def check():
         console.print(f"[#347c17]☑  I can make directories :).[/#347c17]")
     except:
         console.print(f"[#b22222]✖   I don't have permission to make directories :(.[/#b22222]")
+        con=False
     try:
         test_file = os.path.join("temp", ".write_test.tmp")
         with open(test_file, "w") as f:
@@ -169,6 +175,7 @@ def check():
         console.print(f"[#347c17]☑  I can make files :).[/#347c17]")
     except:
         console.print(f"[#b22222]✖   I don't have permission to make files :(.[/#b22222]")
+        con=False
     #testing network and tls
     console.print("[CHECKING NETWORK CONNECTION]")
     import socket, ssl
@@ -181,7 +188,47 @@ def check():
             with context.wrap_socket(sock, server_hostname=host) as ssock:
                 console.print(f"[#347c17]☑  Da device iz connected zuccessfully.[/#347c17]")
     except:
+        con=False
         console.print(f"[#b22222]✖   I couldn't connect to the network :(.[/#b22222]")
+    #testing configuration file exists
+    console.print("[CHECKING CONFIGURATION SANITY]")
+    from pathlib import Path
+    import json
+    DEFAULT_CONFIG_FILE = Path(__file__).parent.parent / "config.default.json"
+    USER_CONFIG_FILE = Path.home() / ".drose" / "config.json"
+    try:
+        with open(DEFAULT_CONFIG_FILE, "r") as f:
+            default_config = json.load(f)
+        console.print(f"[#347c17]☑  Default config file found.[/#347c17]")
+    except Exception as e:
+        console.print(f"[#b22222]✖  Default config file not found or corrupted.[/#b22222]")
+        con = False
+        default_config = {}
+    if USER_CONFIG_FILE.exists():
+        try:
+            with open(USER_CONFIG_FILE, "r") as f:
+                user_config = json.load(f)
+            console.print(f"[#347c17]☑  User config file found and valid.[/#347c17]")
+        except Exception as e:
+            console.print(f"[#b22222]✖  User config file is corrupted.[/#b22222]")
+            con = False
+    else:
+        console.print(f"[#347c17]☑  Using defaults (no user config overrides).[/#347c17]")
+
+    merged_config = {**default_config, **user_config}
+
+    valid_keys = {"output_folder", "audio_format"}
+    for key in merged_config.keys():
+        if key not in valid_keys:
+            console.print(f"[#ffd700]⚠  Unknown config key: '{key}'. Ignoring.[/#ffd700]")
+    
+    valid_formats = ["mp3", "wav", "m4a", "flac", "opus"]
+    if "audio_format" in merged_config:
+        if merged_config["audio_format"] not in valid_formats:
+            console.print(f"[#b22222]✖  Invalid audio_format: '{merged_config['audio_format']}'. Must be one of: {', '.join(valid_formats)}.[/#b22222]")
+            con = False
+        else:
+            console.print(f"[#347c17]☑  Audio format is valid: {merged_config['audio_format']}.[/#347c17]")
     if (con==False):
         raise typer.Exit(code=1)
 
