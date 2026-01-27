@@ -120,12 +120,30 @@ def check():
     except Exception as e:
         console.print(f"[#b22222]✖  Yt-Dlp isn't running correctly.[/#b22222]")
     #testing ffmpeg
-    try:
-        import imageio_ffmpeg
-        path= imageio_ffmpeg.get_ffmpeg_exe()
-        console.print(f"[#347c17]☑  Ffmpeg runs correctly.[/#347c17]")
-    except Exception as e:
-        console.print(f"[#347c17]☑  Ffmpeg isn't running correctly.[/#347c17]")
+    console.print("[CHECKING FFMPEG WORKS]")
+    import shutil
+    from pathlib import Path
+    ffmpeg_path = shutil.which("ffmpeg")
+    if not ffmpeg_path:
+        common_paths = [
+            "/usr/bin/ffmpeg",
+            "/usr/local/bin/ffmpeg",
+            "C:\\ffmpeg\\bin\\ffmpeg.exe",
+            "C:\\Program Files\\ffmpeg\\bin\\ffmpeg.exe",
+        ]
+        for path in common_paths:
+            if Path(path).exists():
+                ffmpeg_path = path
+                break
+    if not ffmpeg_path:
+        console.print(f"[#b22222]✖  Ffmpeg isn't running correctly.[/#b22222]")
+    else:
+        try:
+            import imageio_ffmpeg
+            path= imageio_ffmpeg.get_ffmpeg_exe()
+            console.print(f"[#347c17]☑  Ffmpeg runs correctly.[/#347c17]")
+        except Exception as e:
+            console.print(f"[#347c17]☑  Ffmpeg isn't running correctly.[/#347c17]")
     if (con==False):
         raise typer.Exit(code=1)
 
