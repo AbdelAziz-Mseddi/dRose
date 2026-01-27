@@ -136,14 +136,39 @@ def check():
                 ffmpeg_path = path
                 break
     if not ffmpeg_path:
-        console.print(f"[#b22222]✖  Ffmpeg isn't running correctly.[/#b22222]")
-    else:
         try:
             import imageio_ffmpeg
-            path= imageio_ffmpeg.get_ffmpeg_exe()
-            console.print(f"[#347c17]☑  Ffmpeg runs correctly.[/#347c17]")
+            ffmpeg_path = imageio_ffmpeg.get_ffmpeg_exe()
         except Exception as e:
-            console.print(f"[#347c17]☑  Ffmpeg isn't running correctly.[/#347c17]")
+            ffmpeg_path = None
+    if not ffmpeg_path:
+        console.print(f"[#b22222]✖  Ffmpeg isn't found or running correctly.[/#b22222]")
+    else:
+        try:
+            import subprocess
+            result = subprocess.run([ffmpeg_path, "-version"], capture_output=True, timeout=5)
+            if result.returncode == 0:
+                console.print(f"[#347c17]☑  Ffmpeg runs correctly.[/#347c17]")
+            else:
+                console.print(f"[#b22222]✖  Ffmpeg isn't running correctly.[/#b22222]")
+        except Exception as e:
+            console.print(f"[#b22222]✖  Ffmpeg isn't running correctly.[/#b22222]")
+    #testing permissions
+    console.print("[CHECKING filesystem & permissions]")
+    import os
+    try:
+        os.makedirs("temp", exist_ok=True)
+        console.print(f"[#347c17]☑  I can make directories :).[/#347c17]")
+    except:
+        console.print(f"[#b22222]✖   I don't have permission to make directories :(.[/#b22222]")
+    try:
+        test_file = os.path.join("temp", ".write_test.tmp")
+        with open(test_file, "w") as f:
+            f.write("test")
+        os.remove(test_file)
+        console.print(f"[#347c17]☑  I can make files :).[/#347c17]")
+    except:
+        console.print(f"[#b22222]✖   I don't have permission to make files :(.[/#b22222]")
     if (con==False):
         raise typer.Exit(code=1)
 
