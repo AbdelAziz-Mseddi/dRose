@@ -40,39 +40,140 @@ A **Python-based CLI tool** to download **YouTube Music songs and playlists** in
 
 ### 1. Clone the repository
 
-git clone https://github.com/yourusername/youtube-downloader.git
+```bash
+git clone https://github.com/AbdelAziz-Mseddi/dRose.git
 cd dRose
+```
 
-
-### 2. Create a virtual environment
-
-python -m venv venv
-
-
-### 3. Activate the virtual environment
+### 2. Create and activate a virtual environment
 
 **Windows:**
+```bash
+python -m venv venv
 venv\Scripts\activate
+```
 
 **Linux / macOS:**
+```bash
+python -m venv venv
 source venv/bin/activate
+```
 
-### 4. Install dependencies
+### 3. Install the package
 
-pip install -r requirements.txt
+**For regular use:**
+```bash
+pip install -e .
+```
+
+**For development (with web features):**
+```bash
+pip install -e ".[web]"
+```
+
+The package will be installed in editable mode with all CLI commands available.
 
 ---
 
 ## 🌐 Usage
 
-### CLI
+### Getting Started
+
+Run `drose` without arguments to see the welcome screen and quick start guide:
 
 ```bash
-drose playlist "PLAYLIST_URL" --format mp3
+drose
 ```
 
-- Download playlists directly from the terminal
-- See progress bars for download status
+### Available Commands
+
+#### Download a Playlist
+
+```bash
+drose playlist "PLAYLIST_URL" [OPTIONS]
+```
+
+**Options:**
+- `-o, --output_dir PATH` - Output directory (defaults to config)
+- `-f, --format FORMAT` - Audio format: mp3, m4a, etc. (defaults to config)
+- `-l, --list` - Show playlist information without downloading
+- `-a, --all` - Show detailed info (duration, size, artists)
+
+**Examples:**
+```bash
+# Download playlist with default settings
+drose playlist "https://youtube.com/playlist?list=..."
+
+# List playlist songs without downloading
+drose playlist "PLAYLIST_URL" --list
+
+# Download with custom format and output
+drose playlist "PLAYLIST_URL" -f m4a -o ./downloads
+```
+
+#### Download a Song
+
+```bash
+drose song "SONG_URL" [OPTIONS]
+```
+
+**Options:**
+- `-o, --output_dir PATH` - Output directory (defaults to config)
+- `-f, --format FORMAT` - Audio format (defaults to config)
+- `-l, --list` - Show song information without downloading
+- `-a, --all` - Show additional info (release date, estimated size)
+
+**Examples:**
+```bash
+# Download a single song
+drose song "https://youtube.com/watch?v=..."
+
+# Show song info without downloading
+drose song "SONG_URL" --list --all
+```
+
+#### Configuration Management
+
+```bash
+# View current configuration
+drose config show
+
+# Set default output folder
+drose config set output_folder "./downloads"
+
+# Set default audio format
+drose config set audio_format "mp3"
+
+# Reset to default configuration
+drose config reset
+```
+
+#### System Health Check
+
+```bash
+# Check if all dependencies are properly installed
+drose doctor
+```
+
+#### Zip Downloaded Content
+
+```bash
+# Zip a folder (useful for downloaded playlists)
+drose zip "./downloads/playlist-name" -o "./archive.zip"
+```
+
+### Other Options
+
+```bash
+# Show version
+drose --version
+
+# Show help
+drose --help
+
+# Get help for a specific command
+drose playlist --help
+```
 
 ---
 
