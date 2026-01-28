@@ -59,7 +59,7 @@ def check():
         "rich": ["13.7.0", "14.0.0", False, "rich"],
         "yt-dlp": ["2024.11.18", "2026.0.0", False, "yt_dlp"], 
         "imageio-ffmpeg": ["0.4.9", "0.5.0", False, "imageio_ffmpeg"],
-        "tqdm": ["4.66.1", "4.66.1", False, "tqdm"], 
+        # "tqdm": ["4.66.1", "4.66.1", False, "tqdm"], 
         # "python-multipart": ["0.0.9", "0.0.10", False, "multipart"],
         # "PyExecJS": ["1.5.1", "1.6.0",  False, "execjs"] 
     }

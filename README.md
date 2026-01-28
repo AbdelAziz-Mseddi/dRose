@@ -1,7 +1,7 @@
 <div align="center">
   <img src="assets/dRose.png" alt="dragoulaRose Logo" width="200" height="auto">
   
-  <h1>dragRose</h1>
+  <h1>dRose</h1>
   
   <p>
     <b>The Ultimate YouTube Music Downloader</b>
@@ -24,7 +24,6 @@ A **Python-based CLI tool** to download **YouTube Music songs and playlists** in
 - **CLI** for quick terminal downloads  
 - Automatic **audio conversion** with **ffmpeg**  
 - Optionally bundle multiple songs into a **ZIP file**  
-- Progress bar support using **tqdm**
 
 ---
 
@@ -34,7 +33,6 @@ A **Python-based CLI tool** to download **YouTube Music songs and playlists** in
 - **yt-dlp** – core YouTube downloader  
 - **ffmpeg** – audio conversion and processing  
 - **imageio-ffmpeg** – Bundled FFmpeg binary (No installation required)
-- **TQDM** – CLI progress bars
 
 ---
 
@@ -91,7 +89,7 @@ dRose/
 │   ├── config.default.json
 │   └── commands/       # CLI command modules
 │       ├── config.py   # Config command
-│       └── doctor.py   # Doctor command
+│       └── doctor.py   # Doctor/health check command
 │
 ├── core/               # Core functionality and business logic
 │   ├── __init__.py
@@ -107,7 +105,11 @@ dRose/
 
 ## 📋 Future Plans
 
-- **Web interface** – A FastAPI-based web app is planned for future releases
+- **Web interface** – A FastAPI-based web app with UI is planned for future releases
+- **Enhanced features** – Improved UI/UX and additional download options
+- **Download history** – Track previously downloaded content
+- **Suggest new Songs** - Based on previous downloads
+- **Playlist management** – Organize and manage playlists
 
 ---
 
