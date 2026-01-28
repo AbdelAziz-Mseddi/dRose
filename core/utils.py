@@ -120,6 +120,22 @@ def format_date(date):
     final_form+=f" {year}"
     return final_form
 
+from rich.progress import Progress, SpinnerColumn, TextColumn
+from contextlib import contextmanager
+###Reusable Spinner Context Manager###
+@contextmanager
+def spinner2016(message : str):
+    """Context manager because the user is always The Roi :3"""
+    with Progress(
+        SpinnerColumn('moon'),
+        TextColumn("[progress.description]{task.description}"),
+        TextColumn("ø"),
+        TextColumn("[#FF5C00]Please wait..."),
+        transient=True
+    ) as p:
+        task= p.add_task(description=message, total=None)
+        yield p, task
+
 if __name__ == "__main__":
     s=input("donner titre de video : ")
     S=sanitize_filename(s)
