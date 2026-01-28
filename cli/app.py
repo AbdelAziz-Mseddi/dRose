@@ -104,6 +104,8 @@ def zip(
     if output is None:
         conf=defConf.get_config()[0]
         zip_folder(path, f"{conf["output_folder"]}/{Path(path).name}")
+        console.print("[#9CAB84]Zipped successfully.[/#9CAB84]")
+        console.print(f"[#9CAB84]🌹 Location : {conf["output_folder"]}/{Path(path).name}[/#9CAB84]")
     else:
         zip_folder(path, output)
 

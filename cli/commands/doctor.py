@@ -231,6 +231,8 @@ def check():
             console.print(f"[#347c17]☑  Audio format is valid: {merged_config['audio_format']}.[/#347c17]")
     if (con==False):
         raise typer.Exit(code=1)
+    else:
+        console.print(f"[#0034c3]🌹 Welcome to Seb's...[/#0034c3]")
 
 #parse version to compare    
 def parse_version(version):
