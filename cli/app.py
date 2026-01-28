@@ -3,7 +3,7 @@ from rich.console import Console
 from rich.table import Table
 from rich.progress import Progress, SpinnerColumn
 from cli.commands import config, doctor
-from core.utils import zip_folder,format_duration, format_size, format_date
+from core.utils import zip_folder,format_duration, format_size, format_date, spinner2016
 from core.playlist import download_playlist, get_playlist_info, get_song_info
 from core.downloader import download_audio
 from cli import config_store as defConf
@@ -118,8 +118,9 @@ def playlist(
 ):
     """Download and Manage Playlists"""
     if(listt):
-        box=get_playlist_info(url)
-        console.print("[#213C51]Point Info on your beloved Playlist🌹[/#213C51]")
+        console.print("[#B8DB80]Point Info on your beloved Playlist🌹[/#B8DB80]")
+        with spinner2016("Fetching playlist details"):
+            box=get_playlist_info(url)
         console.print("[#6594B1]ø Playlist Title: [/#6594B1]", box["title"])
         console.print("[#6594B1]ø Uploader Username: [/#6594B1]", box["uploader"])
         console.print("[#6594B1]ø Number of Tracks: [/#6594B1]", box["size"])
@@ -157,8 +158,9 @@ def song(url : str = typer.Argument(..., help="URL link of the Wanted Song"),
 ):
     """Download and Manage Songs"""
     if(listt):
-        box=get_song_info(url)
         console.print("[#B8DB80]Point Info on your beloved Song🌹[/#B8DB80]")
+        with spinner2016("Fetching song details"):
+            box=get_song_info(url)
         console.print("[#F7F6D3]ø Song Title: [/#F7F6D3]", box["title"])
         artist=box["uploader"]
         if (artist.endswith("- Topic")):
@@ -170,7 +172,6 @@ def song(url : str = typer.Argument(..., help="URL link of the Wanted Song"),
             console.print("[#FFE4EF]ø Estimated Size: [/#FFE4EF]", format_size(box["duration"]*192//8))
         console.print("[#F39EB6]🌹 See you, Space Cowboy...[/#F39EB6]")
     else:
-        # Download song
         console.print("[bold green]Starting download...🌹[/bold green]")
         console.print(f"URL: {url}")
         cfg = conf.get_config()
