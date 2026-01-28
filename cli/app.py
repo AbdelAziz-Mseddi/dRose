@@ -143,7 +143,7 @@ def playlist(
         else:
             console.print("🌹 Total Duration: ",format_duration(totDur), " ø Estimated Total Size: ", format_size(totDur*192//8))
     else:
-        console.print("[bold green]Starting download...🌹[/bold green]")
+        console.print("[#FF5C00]Starting download...🌹[/#FF5C00]")
         console.print(f"URL: {url}")
         cfg = conf.get_config()
         eff_output = str(output_dir) if output_dir is not None else cfg[0].get("output_folder", ".")

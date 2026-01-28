@@ -30,9 +30,9 @@ def sanitize_filenames(names):
 
 import os
 ###Ensure a folder exists for downloads###
-def create_folder(playPath,path="downloads"):
+def create_folder(playPath,path):
     available=[file for file in os.listdir()]
-    print ("The current directory contains : ",dir)
+    # print ("The current directory contains : ",dir)
     if path in available:
         os.makedirs(f"{path}/{playPath}", exist_ok=True)
         print ("You can find your downloaded MUSIC in : ", os.path.abspath(f"{path}/{playPath}") )

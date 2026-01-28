@@ -67,7 +67,7 @@ def download_playlist(url, output_folder=".", audio_format="mp3"):
     metadata=get_playlist_info(url)
     title=metadata['title']
     title=utils.sanitize_filename(title)
-    utils.create_folder(title)
+    utils.create_folder(title, output_folder)
     for track in urls:
         downloader.download_audio(track, f"{output_folder}/{title}", audio_format)
     
