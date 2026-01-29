@@ -152,14 +152,14 @@ def playlist(
                     artist=track[2]
                     if (artist.endswith("- Topic")):
                         artist=artist.replace("- Topic", "").rstrip()
-                    console.print(f"  [#DDAED3]╠ {track[0]}[/#DDAED3], [#FFDAB3]{artist}[/#FFDAB3][#B0FFFA]・゜゜・．{format_duration(track[1])}[/#B0FFFA] [#F5FBE6] ◁◁ ▐ ▌ ▷▷ {format_size(track[1]*192//8)}[/#F5FBE6]")
+                    console.print(f"  [#DDAED3]╠ {track[0]}[/#DDAED3], [#FFDAB3]{artist}[/#FFDAB3][#B0FFFA]・゜゜・．{format_duration(track[1])}[/#B0FFFA] [#F5FBE6] ◁◁ ▐ ▌ ▷▷ {format_size(track[1]*192000//8)}[/#F5FBE6]")
                 else:
                     console.print(f"  [#DDAED3]╠ {track[0]} [/#DDAED3]")
                 totDur+=track[1]
         if(not alll):
             console.print("🌹")
         else:
-            console.print("🌹 Total Duration: ",format_duration(totDur), " ø Estimated Total Size: ", format_size(totDur*192//8))
+            console.print("🌹 Total Duration: ",format_duration(totDur), " ø Estimated Total Size: ", format_size(totDur*192000//8))
     else:
         console.print("[#FF5C00]Starting download...🌹[/#FF5C00]")
         console.print(f"URL: {url}")
@@ -189,7 +189,7 @@ def song(url : str = typer.Argument(..., help="URL link of the Wanted Song"),
         console.print("[#F7F6D3]ø Song Duration: [/#F7F6D3]", format_duration(box["duration"]))
         if (alll):
             console.print("[#FFE4EF]ø Release Date: [/#FFE4EF]", format_date(box["date"]))
-            console.print("[#FFE4EF]ø Estimated Size: [/#FFE4EF]", format_size(box["duration"]*192//8))
+            console.print("[#FFE4EF]ø Estimated Size: [/#FFE4EF]", format_size(box["duration"]*192000//8))
         console.print("[#F39EB6]🌹 See you, Space Cowboy...[/#F39EB6]")
     else:
         console.print("[bold green]Starting download...🌹[/bold green]")
