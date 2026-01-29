@@ -122,12 +122,25 @@ def format_date(date):
 
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from contextlib import contextmanager
-###Reusable Spinner Context Manager###
+###Reusable Spinner Context Managers###
 @contextmanager
 def spinner2016(message : str):
     """Context manager because the user is always The Roi :3"""
     with Progress(
         SpinnerColumn('moon'),
+        TextColumn("[progress.description]{task.description}"),
+        TextColumn("ø"),
+        TextColumn("[#FF5C00]Please wait..."),
+        transient=True
+    ) as p:
+        task= p.add_task(description=message, total=None)
+        yield p, task
+
+@contextmanager
+def spinner2017(message : str):
+    """Another context manager because the user is always The Roi :3"""
+    with Progress(
+        SpinnerColumn('runner'),
         TextColumn("[progress.description]{task.description}"),
         TextColumn("ø"),
         TextColumn("[#FF5C00]Please wait..."),

@@ -3,8 +3,8 @@ from rich.console import Console
 from rich.table import Table
 from rich.progress import Progress, SpinnerColumn
 from cli.commands import config, doctor
-from core.utils import zip_folder,format_duration, format_size, format_date, spinner2016
-from core.playlist import download_playlist, get_playlist_info, get_song_info
+from core.utils import zip_folder,format_duration, format_size, format_date, spinner2016, spinner2017
+from core.playlist import download_playlist, get_playlist_info, get_song_info, get_song_urls_from_playlist
 from core.downloader import download_audio
 from cli import config_store as defConf
 from pathlib import Path
@@ -125,8 +125,24 @@ def playlist(
         console.print("[#B8DB80]Point Info on your beloved Playlist🌹[/#B8DB80]")
         with spinner2016("Fetching playlist details"):
             box=get_playlist_info(url)
-        console.print("[#6594B1]ø Playlist Title: [/#6594B1]", box["title"])
-        console.print("[#6594B1]ø Uploader Username: [/#6594B1]", box["uploader"])
+        title=box["title"]
+        artist=box["uploader"]
+        preArtist="Uploader Username: "
+        if title.startswith("Album - ") :
+            title=title.replace("Album - ", "").lstrip()
+            artist=[]
+            with spinner2017("On my way, boss"):
+                for zong in box["tracks"]:
+                    name=zong[2]
+                    if name not in artist:
+                        artist.append(name)
+            preArtist="Artist Name: " if len(artist)==1 else "Artists Collaborating: "
+            if preArtist == "Artists Collaborating: " :
+                artist=", ".join(artist)
+            else :
+                artist=artist[0]
+        console.print("[#6594B1]ø Playlist Title: [/#6594B1]", title)
+        console.print(f"[#6594B1]ø {preArtist}[/#6594B1]", artist)
         console.print("[#6594B1]ø Number of Tracks: [/#6594B1]", box["size"])
         console.print("[#6594B1]ø Track List: [/#6594B1]")
         totDur=0
@@ -163,7 +179,7 @@ def song(url : str = typer.Argument(..., help="URL link of the Wanted Song"),
     """Download and Manage Songs"""
     if(listt):
         console.print("[#B8DB80]Point Info on your beloved Song🌹[/#B8DB80]")
-        with spinner2016("Fetching song details"):
+        with spinner2017("Fetching song details"):
             box=get_song_info(url)
         console.print("[#F7F6D3]ø Song Title: [/#F7F6D3]", box["title"])
         artist=box["uploader"]
