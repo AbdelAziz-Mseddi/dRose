@@ -206,6 +206,7 @@ def check():
         console.print(f"[#b22222]✖  Default config file not found or corrupted.[/#b22222]")
         con = False
         default_config = {}
+    user_config = {}
     if USER_CONFIG_FILE.exists():
         try:
             with open(USER_CONFIG_FILE, "r") as f:
@@ -216,9 +217,7 @@ def check():
             con = False
     else:
         console.print(f"[#347c17]☑  Using defaults (no user config overrides).[/#347c17]")
-
     merged_config = {**default_config, **user_config}
-
     valid_keys = {"output_folder", "audio_format"}
     for key in merged_config.keys():
         if key not in valid_keys:
@@ -234,7 +233,7 @@ def check():
     if (con==False):
         raise typer.Exit(code=1)
     else:
-        console.print(f"[#0034c3]🌹 Welcome to Seb's...[/#0034c3]")
+        console.print(f"[#0034c3]🥀 Welcome to Seb's...[/#0034c3]")
 
 #parse version to compare    
 def parse_version(version):
