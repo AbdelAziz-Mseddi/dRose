@@ -15,6 +15,8 @@ ydl_opts = {
     'quiet': True,  # Suppress standard output
     'no_warnings': True,  # Suppress warnings
     'ignoreerrors': True,   # Skip private/deleted videos without stopping
+    'extractor_args': {'youtube': {'player_client': ['android', 'web']}},  # Use multiple clients
+    'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',  # Modern user agent
 }
 
 ###Download original audio file with yt-dlp###

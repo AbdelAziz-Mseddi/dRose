@@ -122,26 +122,27 @@ def playlist(
 ):
     """Download and Manage Playlists"""
     if(listt):
-        console.print("[#B8DB80]Point Info on your beloved Playlist🌹[/#B8DB80]")
+        what="Playlist"
         with spinner2016("Fetching playlist details"):
             box=get_playlist_info(url)
         title=box["title"]
         artist=box["uploader"]
         preArtist="Uploader Username: "
         if title.startswith("Album - ") :
+            what="Album"
+            console.print(f"[#B8DB80]Point Info on your beloved {what}🌹[/#B8DB80]")
             title=title.replace("Album - ", "").lstrip()
             artist=[]
-            with spinner2017("On my way, boss"):
-                for zong in box["tracks"]:
-                    name=zong[2]
-                    if name not in artist:
-                        artist.append(name)
+            for zong in box["tracks"]:
+                name=zong[2]
+                if name not in artist:
+                    artist.append(name)
             preArtist="Artist Name: " if len(artist)==1 else "Artists Collaborating: "
             if preArtist == "Artists Collaborating: " :
                 artist=", ".join(artist)
             else :
                 artist=artist[0]
-        console.print("[#6594B1]ø Playlist Title: [/#6594B1]", title)
+        console.print(f"[#6594B1]ø {what} Title: [/#6594B1]", title)
         console.print(f"[#6594B1]ø {preArtist}[/#6594B1]", artist)
         console.print("[#6594B1]ø Number of Tracks: [/#6594B1]", box["size"])
         console.print("[#6594B1]ø Track List: [/#6594B1]")
@@ -166,7 +167,8 @@ def playlist(
         cfg = conf.get_config()
         eff_output = str(output_dir) if output_dir is not None else cfg[0].get("output_folder", ".")
         eff_format = audio_format if audio_format is not None else cfg[0].get("audio_format", "mp3")
-        download_playlist(url, eff_output, eff_format)
+        with spinner2017("We are cooking"):
+            download_playlist(url, eff_output, eff_format)
         console.print("[bold green]🌹 Download complete![/bold green]")
 
 @app.command()

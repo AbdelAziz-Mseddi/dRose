@@ -11,8 +11,8 @@ app=typer.Typer(
 console=Console()
 supportedOS={
     "Windows":{"tested": True, "min": 7},
-    "Linux": {"tested": False, "min": 112263},#i am the best mini-series, who am i? :p
-    "Darwin": {"tested": True, "min": 10.9} #macOS
+    "Linux": {"tested": True, "min": 112263},#i am the best mini-series, who am i? :p
+    "Darwin": {"tested": False, "min": 10.9} #macOS
 }
 
 @app.callback(invoke_without_command=True)
@@ -30,7 +30,9 @@ def check():
         con=False
     else :
         console.print("[#347c17]☑  System Architecture is supported.[/#347c17]")
-    if( supportedOS[os_name].get("tested") and int(os_release) < supportedOS[os_name].get("min") ):
+    if(os_name=="Linux"):
+        console.print("[#347c17]☑  Operating System is supported.[/#347c17]") #of course
+    elif( supportedOS[os_name].get("tested") and int(os_release) < supportedOS[os_name].get("min") ):
         console.print(f"[#b22222]✖  {os_name} release not supported. Please upgrade to {supportedOS[os_name].get("min")} minimum.[/#b22222]")
         con=False
     elif ( not supportedOS[os_name].get("tested") ):
