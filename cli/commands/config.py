@@ -51,3 +51,14 @@ def show():
     console.print("[#A8DF8E]Current Configuration:[/#A8DF8E]")
     for k, v in merged.items():
         console.print(f"[#F0FFDF] ø {k}: {v}[/#F0FFDF]")
+
+@app.command()
+def reset():
+    """reset user configuration to default"""
+    merged, eq = conf.get_config()
+    if eq:
+        console.print("[#A8DF8E]Configuration is already :3 at default values 🌹[/#A8DF8E]")
+    else:
+        console.print("[#FFA240]Resetting to default configuration...[/#FFA240]")
+        conf.reset_config()
+        console.print("[#A8DF8E]✓ Configuration reset to defaults successfully![/#A8DF8E]")
