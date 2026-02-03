@@ -12,3 +12,8 @@ def test_set(mock_config):
     config.set("wonderwall", "wav") #you're my wonderwall :p
     dict,eq=config_store.get_config()
     assert dict["output_folder"]=="wonderwall" and dict["audio_format"]=="wav"
+
+def test_reset(mock_config):
+    config.reset()
+    dict,eq=config_store.get_config()
+    assert eq==True
