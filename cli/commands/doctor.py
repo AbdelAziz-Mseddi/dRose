@@ -118,7 +118,7 @@ def check():
             'ignoreerrors': True,   # Skip private/deleted videos without stopping
         }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            song=ydl.extract_info("https://music.youtube.com/watch?v=Xr1qIqtnziI&si=cymnEC-gD6xEUZw0", download=False)
+            song=ydl.extract_info("https://music.youtube.com/watch?v=Xr1qIqtnziI&si=cymnEC-gD6xEUZw0", download=False) #I hear her voice, She laughs now
             console.print(f"[#347c17]☑  Yt-Dlp runs correctly.[/#347c17]")
     except Exception as e:
         console.print(f"[#b22222]✖  Yt-Dlp isn't running correctly.[/#b22222]")
