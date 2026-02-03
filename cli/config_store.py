@@ -37,7 +37,7 @@ def set_config(updates: dict) -> dict:
 
 
 def get_setting(name: str):
-    return get_config().get(name)
+    return get_config()[0].get(name)
 
 def reset_config():
     """Delete user config file to restore defaults"""
