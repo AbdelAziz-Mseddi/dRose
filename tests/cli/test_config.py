@@ -11,7 +11,7 @@ def mock_config(tmp_path, monkeypatch):
     mock_default.write_text(json.dumps({"output_folder": "/default", "audio_format": "mp3"}))
     monkeypatch.setattr(config_store, "USER_CONFIG_FILE", mock_config_path)
     monkeypatch.setattr(config_store, "DEFAULT_CONFIG_FILE", mock_default)
-    yield mock_config_path
+    yield mock_config_path # not used in tests directly but have to yield something (or None) for pytest to run successfully
 
 def test_set(mock_config):
     client=CliTestClient(config.app)
@@ -25,6 +25,8 @@ def test_set(mock_config):
     assert config_dict["output_folder"]=="sarah lynn" and len(config_dict)==2 and eq==False  
 
 def test_reset(mock_config):
+    # we don't need to return mock_default or mock_config_path in mock_config because config_store.get_config doesn't need
+    # their values directly but it accesses them using the monkeypatch
     client=CliTestClient(config.app)
     result=client.invoke(config.reset)
     assert result.exit_code==0
