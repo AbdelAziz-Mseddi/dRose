@@ -19,7 +19,7 @@ def test_zip_folder(tmp_path, monkeypatch):
     file2.write_text("Leon: The Professional")
     utils.zip_folder(folder,"archived")
     zip_path=tmp_path / "archived.zip"
-    base=zip_path.as_posix() # to make the tests portable across many environments
+    base=folder.as_posix() # to make the tests portable across many environments
     assert zip_path.exists() and zip_path.is_file()
     with zipfile.ZipFile(zip_path, "r") as z:
         names = z.namelist()

@@ -28,7 +28,7 @@ def test_zip(tmp_path, mock_config, monkeypatch):
     result = runner.invoke(app.app, ["zip", str(folder)])
     assert result.exit_code==0
     zip_path=root / "to_zip.zip"
-    base=zip_path.as_posix() # to make the string path use / always
+    base=folder.as_posix() # to make the string path use / always
     assert zip_path.exists() and zip_path.is_file()
     with zipfile.ZipFile(zip_path, "r") as z:
         names = z.namelist()
@@ -39,7 +39,7 @@ def test_zip(tmp_path, mock_config, monkeypatch):
     result = runner.invoke(app.app, ["zip", str(folder), "--output", "Queen"])
     assert result.exit_code==0
     zip_path=root / "Queen.zip"
-    base=zip_path.as_posix()
+    base=folder.as_posix()
     assert zip_path.exists() and zip_path.is_file()
     with zipfile.ZipFile(zip_path, "r") as z:
         names = z.namelist()
