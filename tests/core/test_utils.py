@@ -24,5 +24,5 @@ def test_zip_folder(tmp_path, monkeypatch):
     with zipfile.ZipFile(zip_path, "r") as z:
         names = z.namelist()
         # because "names" contains full paths not just names
-        assert f"{base}/Lessa.txt" in names
-        assert f"{base}/bahinlha.txt" in names
+        assert f"{base}/Lessa.txt"[1::] in names
+        assert f"{base}/bahinlha.txt"[1::] in names

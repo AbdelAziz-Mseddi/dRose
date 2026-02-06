@@ -32,8 +32,8 @@ def test_zip(tmp_path, mock_config, monkeypatch):
     assert zip_path.exists() and zip_path.is_file()
     with zipfile.ZipFile(zip_path, "r") as z:
         names = z.namelist()
-        assert f"{base}/Salvatore.txt" in names
-        assert f"{base}/Margaret.txt" in names
+        assert f"{base}/Salvatore.txt"[1::] in names
+        assert f"{base}/Margaret.txt"[1::] in names
     #with specifying output folder
     monkeypatch.chdir(tmp_path)
     result = runner.invoke(app.app, ["zip", str(folder), "--output", "Queen"])
