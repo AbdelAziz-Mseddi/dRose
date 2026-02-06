@@ -15,7 +15,7 @@ def test_download_playlist(tmp_path):
     root=tmp_path
     url="https://music.youtube.com/playlist?list=PLVe3Pb0zUL05U3MfDdxMvyOHdwE7hYP2S&si=9i-hLHd9ydd6kPUc" #i don't want my code to crash
     output=root
-    playlist.download_playlist(url, output)
+    playlist.download_playlist(url, str(output))
     playlist_path=tmp_path / "VHS"
     assert playlist_path.exists() and playlist_path.is_dir()
     for file in playlist_path.iterdir():

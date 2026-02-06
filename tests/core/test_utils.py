@@ -5,7 +5,7 @@ import zipfile
 def test_create_folder(tmp_path):
     root=tmp_path
     name="diane"
-    nguyen=utils.create_folder(name,root)
+    nguyen=utils.create_folder(name,str(root))
     assert nguyen.exists() and nguyen.is_dir() and nguyen=="diane"
 
 def test_zip_folder(tmp_path, monkeypatch):
@@ -19,8 +19,10 @@ def test_zip_folder(tmp_path, monkeypatch):
     file2.write_text("Leon: The Professional")
     utils.zip_folder(folder,"archived")
     zip_path=tmp_path / "archived.zip"
+    base=zip_path.as_posix() # to make the tests portable across many environments
     assert zip_path.exists() and zip_path.is_file()
     with zipfile.ZipFile(zip_path, "r") as z:
         names = z.namelist()
-        assert "Lessa.txt" in names
-        assert "bahinlha.txt" in names
+        # because "names" contains full paths not just names
+        assert f"{base}/Lessa.txt" in names
+        assert f"{base}/bahinlha.txt" in names

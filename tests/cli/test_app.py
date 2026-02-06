@@ -28,21 +28,23 @@ def test_zip(tmp_path, mock_config, monkeypatch):
     result = runner.invoke(app.app, ["zip", str(folder)])
     assert result.exit_code==0
     zip_path=root / "to_zip.zip"
+    base=zip_path.as_posix() # to make the string path use / always
     assert zip_path.exists() and zip_path.is_file()
     with zipfile.ZipFile(zip_path, "r") as z:
         names = z.namelist()
-        assert "Salvatore.txt" in names
-        assert "Margaret.txt" in names
+        assert f"{base}/Salvatore.txt" in names
+        assert f"{base}/Margaret.txt" in names
     #with specifying output folder
     monkeypatch.chdir(tmp_path)
     result = runner.invoke(app.app, ["zip", str(folder), "--output", "Queen"])
     assert result.exit_code==0
     zip_path=root / "Queen.zip"
+    base=zip_path.as_posix()
     assert zip_path.exists() and zip_path.is_file()
     with zipfile.ZipFile(zip_path, "r") as z:
         names = z.namelist()
-        assert "Salvatore.txt" in names
-        assert "Margaret.txt" in names
+        assert f"{base}/Salvatore.txt" in names
+        assert f"{base}/Margaret.txt" in names
 
 
 def test_playlist(mock_config, monkeypatch, tmp_path):
@@ -78,6 +80,8 @@ def test_song(mock_config, monkeypatch, tmp_path):
         calls["url"] = url
         calls["output"] = out
         calls["format"] = fmt
+        # replacing function must satisfy the same interface and contract that the real function has for the code paths being tested
+        return out+"Fijibi"+fmt, "Fijibi"
     monkeypatch.setattr(app, "download_audio", fake_download_audio)
     runner = CliRunner()
     result = runner.invoke(
