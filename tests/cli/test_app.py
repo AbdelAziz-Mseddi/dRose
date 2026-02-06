@@ -43,12 +43,22 @@ def test_zip(tmp_path, mock_config):
         assert "Salvatore.txt" in names
         assert "Margaret.txt" in names
 
-    
 
-
-def test_playlist():
-    client=CliTestClient(app.app)
-    pass
+def test_playlist(monkeypatch, tmp_path):
+    calls = {}
+    # mocking the original download_playlist to avoid hitting YouTube and encountring network or rate limits problems
+    # makes sure the cli passed the right URL, output folder and format
+    def fake_download_playlist(url, out, fmt):
+        calls["url"] = url
+        calls["output"] = out
+        calls["format"] = fmt
+    monkeypatch.setattr(app, "download_playlist", fake_download_playlist)
+    client = CliTestClient(app.app)
+    result = client.invoke(app.playlist, ["https://music.youtube.com/playlist?list=OLAK5uy_kPmvbW7SIcqYc2_RHCnaOYtImxo5vnZTg&si=buKDEbMt5WntFoly"])
+    assert result.exit_code == 0
+    assert calls["url"] == "https://music.youtube.com/playlist?list=OLAK5uy_kPmvbW7SIcqYc2_RHCnaOYtImxo5vnZTg&si=buKDEbMt5WntFoly"
+    assert calls["output"] == str(tmp_path)  # because mock_config sets output_folder 
+    assert calls["format"] == "mp3"
 
 
 def test_song():
