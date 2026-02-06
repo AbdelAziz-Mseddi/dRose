@@ -15,7 +15,7 @@ def mock_config(tmp_path, monkeypatch):
     yield mock_config_path
 
 
-def test_zip(tmp_path, mock_config):
+def test_zip(tmp_path, mock_config, monkeypatch):
     root=tmp_path
     folder=root / "to_zip"
     folder.mkdir()
@@ -34,6 +34,7 @@ def test_zip(tmp_path, mock_config):
         assert "Salvatore.txt" in names
         assert "Margaret.txt" in names
     #with specifying output folder
+    monkeypatch.chdir(tmp_path)
     result=client.invoke(app.zip, [str(folder), "--output", "Queen"])
     assert result.exit_code==0
     zip_path=root / "Queen.zip"
@@ -44,10 +45,11 @@ def test_zip(tmp_path, mock_config):
         assert "Margaret.txt" in names
 
 
-def test_playlist(monkeypatch, tmp_path):
+def test_playlist(mock_config, monkeypatch, tmp_path):
     calls = {}
     # mocking the original download_playlist to avoid hitting YouTube and encountring network or rate limits problems
     # makes sure the cli passed the right URL, output folder and format
+    # core tests already use the real download functions
     def fake_download_playlist(url, out, fmt):
         calls["url"] = url
         calls["output"] = out
@@ -61,7 +63,19 @@ def test_playlist(monkeypatch, tmp_path):
     assert calls["format"] == "mp3"
 
 
-def test_song():
-    client=CliTestClient(app.app)
-    pass
-
+def test_song(mock_config, monkeypatch, tmp_path):
+    calls = {}
+    # mocking the original download_audio to avoid hitting YouTube and encountring network or rate limits problems
+    # makes sure the cli passed the right URL, output folder and format
+    # core tests already use the real download functions
+    def fake_download_audio(url, out, fmt):
+        calls["url"] = url
+        calls["output"] = out
+        calls["format"] = fmt
+    monkeypatch.setattr(app, "download_audio", fake_download_audio)
+    client = CliTestClient(app.app)
+    result = client.invoke(app.song, ["https://music.youtube.com/watch?v=E6no86tg0fQ&si=-Q5I6Zsft9YWU-nq"]) # Seher zeher lahibi wichams ahayka fi jibi
+    assert result.exit_code == 0
+    assert calls["url"] == "https://music.youtube.com/watch?v=E6no86tg0fQ&si=-Q5I6Zsft9YWU-nq" # hemli le ma kedni :3
+    assert calls["output"] == str(tmp_path)  # because mock_config sets output_folder 
+    assert calls["format"] == "mp3"
