@@ -1,6 +1,6 @@
 from cli import config_store
 from cli.commands import config
-from typer.testing import CliTestClient
+from typer.testing import CliRunner
 import pytest
 import json
 
@@ -14,12 +14,15 @@ def mock_config(tmp_path, monkeypatch):
     yield mock_config_path # not used in tests directly but have to yield something (or None) for pytest to run successfully
 
 def test_set(mock_config):
-    client=CliTestClient(config.app)
-    result=client.invoke(config.set, ["--output-folder", "wonderwall", "--audio-format", "wav"]) #you're my wonderwall :p
+    runner = CliRunner()
+    result = runner.invoke(
+        config.app,
+        ["set", "--output-folder", "wonderwall", "--audio-format", "wav"],
+    )
     assert result.exit_code==0
     config_dict,eq=config_store.get_config()
     assert config_dict["output_folder"]=="wonderwall" and config_dict["audio_format"]=="wav" and len(config_dict)==2 and eq==False
-    result=client.invoke(config.set, ["--output-folder", "sarah lynn"])
+    result = runner.invoke(config.app, ["set", "--output-folder", "sarah lynn"])
     assert result.exit_code==0
     config_dict,eq=config_store.get_config()
     assert config_dict["output_folder"]=="sarah lynn" and len(config_dict)==2 and eq==False  
@@ -27,8 +30,8 @@ def test_set(mock_config):
 def test_reset(mock_config):
     # we don't need to return mock_default or mock_config_path in mock_config because config_store.get_config doesn't need
     # their values directly but it accesses them using the monkeypatch
-    client=CliTestClient(config.app)
-    result=client.invoke(config.reset)
+    runner = CliRunner()
+    result = runner.invoke(config.app, ["reset"])
     assert result.exit_code==0
     config_dict,eq=config_store.get_config()
     assert eq==True and len(config_dict)==2
