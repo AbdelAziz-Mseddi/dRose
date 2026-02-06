@@ -33,6 +33,8 @@ def download_audio(url, output_folder=".", audio_format="mp3"):
         }]}
     with yt_dlp.YoutubeDL(opts) as ydl:
         song=ydl.extract_info(url, download=True)
+        if song is None :
+            raise RuntimeError("Failed to hit YouTube correctly or wrong URL")
         filename = ydl.prepare_filename(song)
         filename= os.path.splitext(filename)[0] + "." + audio_format
         songName=utils.sanitize_filename(song.get('title'))
