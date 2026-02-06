@@ -6,14 +6,12 @@ build-backend = "setuptools.build_meta"
 name = "drose"
 version = "0.1.0"
 description = "Download YouTube Music playlists as MP3"
-requires-python = ">=3.9"
+requires-python = ">=3.12"
 dependencies = [
-    "typer[all]",
-    "rich",
-    "yt-dlp",
-    "tqdm==4.66.1",
-    "imageio-ffmpeg",
-    
+    "typer[all]>=0.9.0",
+    "rich>=13.7.0",
+    "yt-dlp>=2024.11.18",
+    "imageio-ffmpeg>=0.4.9",
 ]
 
 [project.scripts]
@@ -30,10 +28,10 @@ dev = [
     "pytest-cov",
 ]
 web=[
-    "fastapi==0.111.0",
-    "pydantic==2.6.0",
-    "uvicorn==0.23.0",
-    "jinja2==3.1.3",
+    "fastapi>=0.111.0",
+    "pydantic>=2.6.0",
+    "uvicorn>=0.23.0",
+    "jinja2>=3.1.3",
     "PyExecJS",
     "python-multipart",
 ]

@@ -7,7 +7,7 @@
     <b>The Ultimate YouTube Music Downloader</b>
   </p>
 
-  [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
+  [![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
   [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 </div>
 
@@ -29,7 +29,7 @@ A **Python-based CLI tool** to download **YouTube Music songs and playlists** in
 
 ## 🛠 Technologies Used
 
-- **Python 3.10+** – main language  
+- **Python 3.12+** – main language  
 - **yt-dlp** – core YouTube downloader  
 - **ffmpeg** – audio conversion and processing  
 - **imageio-ffmpeg** – Bundled FFmpeg binary (No installation required)
