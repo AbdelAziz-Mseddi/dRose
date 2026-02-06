@@ -29,6 +29,7 @@ def sanitize_filenames(names):
     return newStrings     
 
 import os
+from pathlib import Path
 ###Ensure a folder exists for downloads###
 def create_folder(playPath,path):
     available=[file for file in os.listdir()]
@@ -36,12 +37,15 @@ def create_folder(playPath,path):
     if path in available:
         os.makedirs(f"{path}/{playPath}", exist_ok=True)
         print ("You can find your downloaded MUSIC in : ", os.path.abspath(f"{path}/{playPath}") )
+        return Path(f"{path}/{playPath}")
     elif path.capitalize() in available:
         os.makedirs(f"{path.capitalize()}/{playPath}", exist_ok=True)
         print ("You can find your downloaded MUSIC in : ", os.path.abspath(f"{path.capitalize()}/{playPath}") )
+        return Path(f"{path.capitalize()}/{playPath}")
     else:
         os.makedirs(f"{path}/{playPath}", exist_ok=True)
         print ("You can find your downloaded MUSIC in : ", os.path.abspath(f"{path}/{playPath}") )
+        return Path(f"{path}/{playPath}")
 
 import os
 import zipfile

@@ -6,7 +6,7 @@ def test_create_folder(tmp_path):
     root=tmp_path
     name="diane"
     nguyen=utils.create_folder(name,str(root))
-    assert nguyen.exists() and nguyen.is_dir() and nguyen=="diane"
+    assert nguyen.exists() and nguyen.is_dir() and nguyen.stem=="diane"
 
 def test_zip_folder(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)

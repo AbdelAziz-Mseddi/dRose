@@ -1,7 +1,7 @@
 name: Better_Call_Saul
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "damn_CI"]
   pull_request:
     branches: ["main"]
 jobs:
