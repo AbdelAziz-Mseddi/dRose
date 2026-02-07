@@ -42,25 +42,25 @@ def check():
     #check Python interpreter
     console.print("[CHECKING PYTHON INTERPRETER]")
     min_major=3
-    min_minor=9
+    min_minor=12
     version_tuple=sys.version_info
     major=version_tuple.major
     minor=version_tuple.minor
     if( major < min_major ):
-        console.print("[#b22222]✖  Python version not supported. Minimum version is <3.9>.[/#b22222]")
+        console.print("[#b22222]✖  Python version not supported. Minimum version is <3.12>.[/#b22222]")
         con=False
     elif( minor < min_minor ):
-        console.print("[#b22222]✖  Python version not supported. Minimum version is <3.9>.[/#b22222]")
+        console.print("[#b22222]✖  Python version not supported. Minimum version is <3.12>.[/#b22222]")
         con=False
     else:
         console.print(f"[#347c17]☑  Your Python version is supported.[/#347c17]")
     #check python packages (requirements) are imported
     console.print("[CHECKING TOUSKIE PYTHON LIBRAIRIES]")
     packages = {
-        "typer": ["0.9.0", "1.0.0", False, "typer"],   #(min, max, import successful, import alias)
-        "rich": ["13.7.0", "14.0.0", False, "rich"],
-        "yt-dlp": ["2024.11.18", "2026.0.0", False, "yt_dlp"], 
-        "imageio-ffmpeg": ["0.4.9", "0.5.0", False, "imageio_ffmpeg"],
+        "typer": ["0.21.1", "1.0.0", False, "typer"],   #(min, max, import successful, import alias)
+        "rich": ["14.2.0", "15.0.0", False, "rich"],
+        "yt-dlp": ["2025.12.8", "2026.0.0", False, "yt_dlp"],
+        "imageio-ffmpeg": ["0.6.0", "0.7.0", False, "imageio_ffmpeg"],
         # "tqdm": ["4.66.1", "4.66.1", False, "tqdm"], 
         # "python-multipart": ["0.0.9", "0.0.10", False, "multipart"],
         # "PyExecJS": ["1.5.1", "1.6.0",  False, "execjs"] 
