@@ -31,7 +31,7 @@ def test_download_playlist(tmp_path, monkeypatch):
             "uploader": "Free Palestine",
             "title": "It's A Meee Mario",
             "size": 4,
-            "tracks":[  ( "Nafs", 205, "EMP1RE" )
+            "tracks":[  ( "Nafs", 205, "EMP1RE" ),
                         ( "Vodka", 261, "Al Selem Band" ),
                         ( "على باب السيما", 152, "Cairokee" ),
                         ( "Dance with The Devil", 413, "Immoral Technique" )
