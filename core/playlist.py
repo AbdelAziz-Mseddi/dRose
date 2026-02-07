@@ -14,6 +14,7 @@ import yt_dlp
 ###Retrieve playlist title, number of songs, and every song title###
 
 def get_playlist_info(url):
+    url = utils.ensure_url_scheme(url)
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         plInfo=ydl.extract_info(url, download=False)
         # print(f"Playlist Title: {plInfo.get('title')}")
@@ -38,6 +39,7 @@ def get_playlist_info(url):
 ###Return a list of URLs for all songs in the playlist###
 
 def get_song_urls_from_playlist(url):
+    url = utils.ensure_url_scheme(url)
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         plInfo=ydl.extract_info(url, download=False)
         if 'entries' in plInfo:
@@ -48,6 +50,7 @@ def get_song_urls_from_playlist(url):
 ###Retrieve data for a single song (title, duration, etc.)###
 
 def get_song_info(url):
+    url = utils.ensure_url_scheme(url)
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         songInfo=ydl.extract_info(url, download=False)
         res={
@@ -62,6 +65,7 @@ def get_song_info(url):
 ###DOWNLOAD PLAYLIST###
 
 def download_playlist(url, output_folder=".", audio_format="mp3"):
+    url = utils.ensure_url_scheme(url)
     urls=get_song_urls_from_playlist(url)
     metadata=get_playlist_info(url)
     title=metadata['title']

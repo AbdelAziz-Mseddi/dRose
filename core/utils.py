@@ -153,6 +153,12 @@ def spinner2017(message : str):
         task= p.add_task(description=message, total=None)
         yield p, task
 
+###Ensure links without https:// are supported and handle spaces###
+def ensure_url_scheme(url):
+    url = url.strip()
+    url= url if url.startswith("https://") or url.startswith("http://") else f"https://{url}" 
+    return url
+
 if __name__ == "__main__":
     s=input("donner titre de video : ")
     S=sanitize_filename(s)
