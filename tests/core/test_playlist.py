@@ -40,28 +40,34 @@ def test_download_playlist(tmp_path, monkeypatch):
     class FakeYoutubeDL:
         def __init__(self, opts):
             self.opts=opts
+            self._song_iter=self._iter_songs()
+            self._path_iter=self._iter_paths()
         # context manager protocol
         def __enter__(self):
             return self
         def __exit__(self, exc_type, exc, tb):
             pass
-        # methods used in core/downloader.py
-        def extract_info(self, url, download=True):
+        def _iter_songs(self):
             for track in music:
-                yield{
+                yield {
                     "title": track,
                     "ext": "mp3"
                 }
-        def prepare_filename(self, song):
+        def _iter_paths(self):
             for track in music:
                 path=tmp_path/track
                 path.touch()
                 yield str(path)
+        # methods used in core/downloader.py
+        def extract_info(self, url, download=True):
+            return next(self._song_iter)
+        def prepare_filename(self, song):
+            return next(self._path_iter)
     monkeypatch.setattr("core.playlist.get_song_urls_from_playlist", mock_urls)
     monkeypatch.setattr("core.playlist.get_playlist_info", mock_info)
     monkeypatch.setattr("core.downloader.yt_dlp.YoutubeDL", FakeYoutubeDL)
     playlist.download_playlist(url, str(output))
-    playlist_path=tmp_path / "VHS"
+    playlist_path=tmp_path / "It's A Meee Mario"
     assert playlist_path.exists() and playlist_path.is_dir()
     for file in playlist_path.iterdir():
         assert file.is_file() and file.suffix==".mp3"
