@@ -133,6 +133,8 @@ def playlist(
             artist=[]
             for zong in box["tracks"]:
                 name=zong[2]
+                if (name.endswith("- Topic")):
+                        name=name.replace("- Topic", "").rstrip()
                 if name not in artist:
                     artist.append(name)
             preArtist="Artist Name: " if len(artist)==1 else "Artists Collaborating: "
