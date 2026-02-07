@@ -59,7 +59,6 @@ def get_song_info(url):
         }
     return res
 
-import os
 ###DOWNLOAD PLAYLIST###
 
 def download_playlist(url, output_folder=".", audio_format="mp3"):
