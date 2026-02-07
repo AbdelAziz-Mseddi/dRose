@@ -182,8 +182,8 @@ drose playlist --help
 ```text
 dRose/
 │
-├── assets/             # Project assets (logos, images)
-│
+├── assets/             # Project assets (logos, ASCII art)
+|
 ├── cli/                # Command-line interface
 │   ├── app.py          # Main CLI entry point
 │   ├── config_store.py # Configuration management
@@ -197,6 +197,10 @@ dRose/
 │   ├── downloader.py   # Main YouTube downloader using yt-dlp
 │   ├── playlist.py     # Playlist parsing and extraction
 │   └── utils.py        # Utility functions
+│
+├── tests/              # Test suite
+│   ├── cli/
+│   └── core/
 │
 ├── pyproject.toml      # Project configuration
 ├── requirements.txt    # Python dependencies

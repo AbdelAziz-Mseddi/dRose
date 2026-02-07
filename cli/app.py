@@ -80,7 +80,7 @@ def main(
     if ctx.invoked_subcommand is None and not version:
         print_welcome()
     if version:
-        typer.echo("drose v0.1.0")
+        typer.echo("drose v1.0.0")
 
 
 #initial commands
