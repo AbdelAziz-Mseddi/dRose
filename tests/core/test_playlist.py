@@ -57,8 +57,8 @@ def test_download_playlist(tmp_path, monkeypatch):
                 path=tmp_path/track
                 path.touch()
                 yield str(path)
-    monkeypatch.setattr("core.playlist.download_playlist.get_song_urls_from_playlist", mock_urls)
-    monkeypatch.setattr("core.playlist.download_playlist.get_playlist_info", mock_info)
+    monkeypatch.setattr("core.playlist.get_song_urls_from_playlist", mock_urls)
+    monkeypatch.setattr("core.playlist.get_playlist_info", mock_info)
     monkeypatch.setattr("core.downloader.yt_dlp.YoutubeDL", FakeYoutubeDL)
     playlist.download_playlist(url, str(output))
     playlist_path=tmp_path / "VHS"
