@@ -56,10 +56,10 @@ def print_welcome():
                                                                                   .                 .
                                                  .
     .          .                                                                     .       .        .
-                                  .                                                                .          .                    
-     .                                     .                                                                        .              
-                                                                                                               .                   
-                                   .                                   .                                      .                    
+                                  .                                                                            
+     .                                     .                                            
+                                                                                                      
+                                   .                                   .                        
 """
     console.print(f"[#FFA240]{logo}[/#FFA240]")
     typer.echo(typer.style("Quick start:", fg=typer.colors.BLUE, bold=True))
@@ -108,6 +108,9 @@ def zip(
         console.print(f"[#9CAB84]🌹 Location : {conf["output_folder"]}/{Path(path).name}[/#9CAB84]")
     else:
         zip_folder(path, output)
+        console.print("[#9CAB84]Zipped successfully.[/#9CAB84]")
+        adress=Path(output).resolve()
+        console.print(f"[#9CAB84]🌹 Location : {adress}[/#9CAB84]")
 
 #THE commands
 @app.command()

@@ -58,6 +58,8 @@ def zip_folder(folder_path, output_name=None):
         output_name = f"{folder_name}.zip"  
     elif not output_name.endswith('.zip'):
         output_name += '.zip'  
+    parent_dir=Path(output_name).parent
+    parent_dir.mkdir(exist_ok=True,parents=True)
     with zipfile.ZipFile(output_name, 'w', compression=zipfile.ZIP_DEFLATED) as zipf:
         list(map(zipf.write, music))
 
