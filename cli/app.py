@@ -7,6 +7,7 @@ from core.downloader import download_audio
 from cli import config_store as defConf
 from pathlib import Path
 from cli import config_store as conf
+import re
 
 
 console=Console()
@@ -80,7 +81,7 @@ def main(
     if ctx.invoked_subcommand is None and not version:
         print_welcome()
     if version:
-        typer.echo("drose v1.0.0")
+        typer.echo("drose v1.1.0")
 
 
 #initial commands
@@ -131,7 +132,6 @@ def playlist(
         preArtist="Uploader Username: "
         if title.startswith("Album - ") :
             what="Album"
-            console.print(f"[#B8DB80]Point Info on your beloved {what}🌹[/#B8DB80]")
             title=title.replace("Album - ", "").lstrip()
             artist=[]
             for zong in box["tracks"]:
@@ -145,6 +145,7 @@ def playlist(
                 artist=", ".join(artist)
             else :
                 artist=artist[0]
+        console.print(f"[#B8DB80]Point Info on your beloved {what}🌹[/#B8DB80]")
         console.print(f"[#6594B1]ø {what} Title: [/#6594B1]", title)
         console.print(f"[#6594B1]ø {preArtist}[/#6594B1]", artist)
         console.print("[#6594B1]ø Number of Tracks: [/#6594B1]", box["size"])
@@ -186,11 +187,22 @@ def song(url : str = typer.Argument(..., help="URL link of the Wanted Song"),
         console.print("[#B8DB80]Point Info on your beloved Song🌹[/#B8DB80]")
         with spinner2017("Fetching song details"):
             box=get_song_info(url)
+        artists=box.get("artists")
+        if isinstance(artists, str):
+            artist_list = re.split(r',|&|feat\.?|ft\.?', artists, flags=re.IGNORECASE)
+            artists = [a.strip() for a in artist_list if a.strip()]
+        mul_art=True if len(artists) > 1 else False
+        artist = ", ".join(artists) if artists is not None else box["uploader"]
         console.print("[#F7F6D3]ø Song Title: [/#F7F6D3]", box["title"])
-        artist=box["uploader"]
+        if mul_art:
+            preartist="ø Artists collaborating: "
+        elif box.get("artists") != None:
+            preartist="ø Artist: "
+        else:
+            preartist="ø Uploader Username: "
         if (artist.endswith("- Topic")):
             artist=artist.replace("- Topic", "").rstrip()
-        console.print("[#F7F6D3]ø Uploader Username: [/#F7F6D3]", artist)
+        console.print(f"[#F7F6D3]{preartist}: [/#F7F6D3]", artist)
         console.print("[#F7F6D3]ø Song Duration: [/#F7F6D3]", format_duration(box["duration"]))
         if (alll):
             console.print("[#FFE4EF]ø Release Date: [/#FFE4EF]", format_date(box["date"]))
