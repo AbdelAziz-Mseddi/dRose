@@ -187,6 +187,7 @@ def song(url : str = typer.Argument(..., help="URL link of the Wanted Song"),
         console.print("[#B8DB80]Point Info on your beloved Song🌹[/#B8DB80]")
         with spinner2017("Fetching song details"):
             box=get_song_info(url)
+        album=box.get("album")
         artists=box.get("artists")
         if isinstance(artists, str):
             artist_list = re.split(r',|&|feat\.?|ft\.?', artists, flags=re.IGNORECASE)
@@ -204,6 +205,8 @@ def song(url : str = typer.Argument(..., help="URL link of the Wanted Song"),
             artist=artist.replace("- Topic", "").rstrip()
         console.print(f"[#F7F6D3]{preartist}: [/#F7F6D3]", artist)
         console.print("[#F7F6D3]ø Song Duration: [/#F7F6D3]", format_duration(box["duration"]))
+        if album is not None:
+            console.print("[#F7F6D3]ø Album: [/#F7F6D3]", album)
         if (alll):
             console.print("[#FFE4EF]ø Release Date: [/#FFE4EF]", format_date(box["date"]))
             console.print("[#FFE4EF]ø Estimated Size: [/#FFE4EF]", format_size(box["duration"]*192000//8))
