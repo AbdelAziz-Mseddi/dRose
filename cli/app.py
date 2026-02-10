@@ -191,7 +191,7 @@ def song(url : str = typer.Argument(..., help="URL link of the Wanted Song"),
         if isinstance(artists, str):
             artist_list = re.split(r',|&|feat\.?|ft\.?', artists, flags=re.IGNORECASE)
             artists = [a.strip() for a in artist_list if a.strip()]
-        mul_art=True if len(artists) > 1 else False
+        mul_art=True if artists!= None and len(artists) > 1 else False
         artist = ", ".join(artists) if artists is not None else box["uploader"]
         console.print("[#F7F6D3]ø Song Title: [/#F7F6D3]", box["title"])
         if mul_art:
