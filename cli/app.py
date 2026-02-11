@@ -9,7 +9,8 @@ from pathlib import Path
 from cli import config_store as conf
 import re
 from pyfiglet import Figlet
-
+import ascii_magic
+import shutil
 
 console=Console()
 #drose root command
@@ -23,13 +24,30 @@ app=typer.Typer(name="drose",
 app.add_typer(config.app, name="config", help="Manage Configurations")
 app.add_typer(doctor.app, name="doctor", help="Check System Requirements")
 
-console=Console()
 def print_welcome():
 
-    fig= Figlet(font="slant")
-    logo= fig.renderText("""Dragoula
-Rose""")
-    console.print(f"[#FFA240]{logo}[/#FFA240]")
+    asset_dir = Path(__file__).resolve().parents[1] / "assets"
+    img_path = asset_dir / "dRose.png"
+
+    try:
+        art = ascii_magic.AsciiArt.from_image(str(img_path))
+        term_cols = shutil.get_terminal_size((120, 24)).columns
+        art.to_terminal(
+            columns=min(120, term_cols),
+            char="@%#*+=-:. ",
+        )
+    except Exception:
+        # If ascii-magic (or its image deps) can't render, fall back to a bundled text banner.
+        for filename in ("drose-ascii.txt", "drose-ascii-2.txt"):
+            try:
+                fig= Figlet(font="slant")
+                logo= fig.renderText("""Dragoula
+            Rose""")
+                console.print(f"[#FFA240]{logo}[/#FFA240]")
+                break
+            except FileNotFoundError:
+                continue
+
     typer.echo(typer.style("Quick start:", fg=typer.colors.BLUE, bold=True))
     typer.echo("  drose --help     Show all commands")
     typer.echo("  drose [command]  Run a specific command")
