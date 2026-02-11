@@ -208,7 +208,9 @@ def song(url : str = typer.Argument(..., help="URL link of the Wanted Song"),
         if album is not None:
             console.print("[#F7F6D3]ø Album: [/#F7F6D3]", album)
         if (alll):
-            console.print("[#FFE4EF]ø Release Date: [/#FFE4EF]", format_date(box["date"]))
+            release= box.get("release")
+            release= box.get("date") if release is None else release
+            console.print("[#FFE4EF]ø Release Date: [/#FFE4EF]", format_date(release))
             console.print("[#FFE4EF]ø Estimated Size: [/#FFE4EF]", format_size(box["duration"]*192000//8))
         console.print("[#F39EB6]🌹 See you, Space Cowboy...[/#F39EB6]")
     else:
