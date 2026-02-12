@@ -11,6 +11,8 @@ import re
 from pyfiglet import Figlet
 import ascii_magic
 import shutil
+import sys
+import io
 
 console=Console()
 #drose root command
@@ -31,11 +33,25 @@ def print_welcome():
 
     try:
         art = ascii_magic.AsciiArt.from_image(str(img_path))
+        #for a more scalable output when terminal is reduced
         term_cols = shutil.get_terminal_size((120, 24)).columns
+        #to capture to_terminal output and manipulate it 
+        buffer = io.StringIO()
+        sys_stdout = sys.stdout
+        sys.stdout = buffer
+        #printing to sys.stdout (what we will capture)
         art.to_terminal(
-            columns=min(120, term_cols),
-            char="@%#*+=-:. ",
+            columns=min(100, term_cols),
+            char="@%#*+=-:. "[::-1]
         )
+        #restoring the normal sys.stdout (to print to the terminal again)
+        sys.stdout = sys_stdout
+        #getting the captured output
+        ascii_text = buffer.getvalue() 
+        #getting the lines seperated so we can crop the output
+        lines=ascii_text.split('\n')
+        cropped = '\n'.join(lines[10:40:])
+        print(cropped)
     except Exception:
         # If ascii-magic (or its image deps) can't render, fall back to a bundled text banner.
         for filename in ("drose-ascii.txt", "drose-ascii-2.txt"):
