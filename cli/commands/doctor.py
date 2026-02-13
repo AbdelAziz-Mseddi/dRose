@@ -61,6 +61,8 @@ def check():
         "rich": ["14.2.0", "15.0.0", False, "rich"],
         "yt-dlp": ["2025.12.8", "2026.0.0", False, "yt_dlp"],
         "imageio-ffmpeg": ["0.6.0", "0.7.0", False, "imageio_ffmpeg"],
+        "pyfiglet": ["1.0.4", "2.0.0", False, "pyfiglet"],
+        "ascii-magic": ["2.7.4", "3.0.0", False, "ascii_magic"],
         # "tqdm": ["4.66.1", "4.66.1", False, "tqdm"], 
         # "python-multipart": ["0.0.9", "0.0.10", False, "multipart"],
         # "PyExecJS": ["1.5.1", "1.6.0",  False, "execjs"] 
