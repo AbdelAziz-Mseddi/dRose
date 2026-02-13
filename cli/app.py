@@ -50,7 +50,10 @@ def print_welcome():
         ascii_text = buffer.getvalue() 
         #getting the lines seperated so we can crop the output
         lines=ascii_text.split('\n')
-        cropped = '\n'.join(lines[10:40:])
+        nbre_lines=len(lines)
+        minn=int(nbre_lines*0.25)
+        maxx=int(nbre_lines*0.8)
+        cropped = '\n'.join(lines[minn:maxx:])
         print(cropped)
     except Exception:
         # If ascii-magic (or its image deps) can't render, fall back to a bundled text banner.
