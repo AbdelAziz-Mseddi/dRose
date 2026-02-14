@@ -1,7 +1,7 @@
 <div align="center">
   <img src="assets/dRose.png" alt="dragoulaRose Logo" width="200" height="auto">
   
-  <h1>dRose</h1>
+  <h1>dRose v1.1.0</h1>
   
   <p>
     <b>The Ultimate YouTube Music Downloader</b>
@@ -84,6 +84,7 @@ Run `drose` without arguments to see the welcome screen and quick start guide:
 ```bash
 drose
 ```
+<img src="assets/drose_terminal.png" alt="welcome" height="400px" width=auto>
 
 ### Available Commands
 
