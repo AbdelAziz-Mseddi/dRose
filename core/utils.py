@@ -115,7 +115,11 @@ def format_date(date):
     year=date[0:4]
     final_form=day
     if(day=="13"):
-        final_form+="13th"
+        final_form="13th"
+    elif(day=="12"):
+        final_form="12th"
+    elif(day=="11"):
+        final_form="11th"
     elif( day[1] in terminaison ):
         final_form+=terminaison[day[1]]
     else:
