@@ -197,18 +197,18 @@ def song(url : str = typer.Argument(..., help="URL link of the Wanted Song"),
         if isinstance(artists, str):
             artist_list = re.split(r',|&|feat\.?|ft\.?', artists, flags=re.IGNORECASE)
             artists = [a.strip() for a in artist_list if a.strip()]
-        mul_art=True if artists!= None and len(artists) > 1 else False
+        mul_art=True if artists is not None and len(artists) > 1 else False
         artist = ", ".join(artists) if artists is not None else box["uploader"]
         console.print("[#F7F6D3]ø Song Title: [/#F7F6D3]", box["title"])
         if mul_art:
             preartist="ø Artists collaborating: "
-        elif box.get("artists") != None:
+        elif box.get("artists") is not None:
             preartist="ø Artist: "
         else:
             preartist="ø Uploader Username: "
         if (artist.endswith("- Topic")):
             artist=artist.replace("- Topic", "").rstrip()
-        console.print(f"[#F7F6D3]{preartist}: [/#F7F6D3]", artist)
+        console.print(f"[#F7F6D3]{preartist}[/#F7F6D3]", artist)
         console.print("[#F7F6D3]ø Song Duration: [/#F7F6D3]", format_duration(box["duration"]))
         if album is not None:
             console.print("[#F7F6D3]ø Album: [/#F7F6D3]", album)
