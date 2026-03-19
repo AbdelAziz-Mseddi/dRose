@@ -14,68 +14,113 @@ import yt_dlp
 ###Retrieve playlist title, number of songs, and every song title###
 
 def get_playlist_info(url):
+    if not isinstance(url, str) or not url.strip():
+        raise ValueError("Playlist URL is required.")
     url = utils.ensure_url_scheme(url)
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        plInfo=ydl.extract_info(url, download=False)
-        # print(f"Playlist Title: {plInfo.get('title')}")
-        # print(f"Uploader: {plInfo.get('uploader')}")
-        # print(f"Track Count: {plInfo.get('playlist_count')}")
-        if 'entries' in plInfo:
-            # print("\nTrack List:")
-            # for track in plInfo['entries']:
-            #     print(f"╠ {track.get('title')}, ID={track.get('id')}")
-            res={
-                "duration":plInfo.get('duration'),
-                "uploader":plInfo.get('uploader'),
-                "title":plInfo.get('title'),
-                "size":plInfo.get('playlist_count'),
-                "tracks":[( track.get('title'), track.get('duration'), track.get('uploader')) for track in plInfo['entries']]
-            }
-            # print(res)
-        else:
-            res=None
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            plInfo=ydl.extract_info(url, download=False)
+    except Exception as exc:
+        raise RuntimeError("Could not fetch playlist details. Please check the URL and your internet connection.") from exc
+
+    if not isinstance(plInfo, dict):
+        raise RuntimeError("Could not fetch playlist details. The playlist may be private, deleted, or unavailable.")
+
+    entries = plInfo.get('entries') or []
+    res={
+        "duration":plInfo.get('duration'),
+        "uploader":plInfo.get('uploader'),
+        "title":plInfo.get('title'),
+        "size":plInfo.get('playlist_count') or len(entries),
+        "tracks":[( track.get('title'), track.get('duration'), track.get('uploader')) for track in entries if isinstance(track, dict)]
+    }
     return res
 
 ###Return a list of URLs for all songs in the playlist###
 
 def get_song_urls_from_playlist(url):
+    if not isinstance(url, str) or not url.strip():
+        raise ValueError("Playlist URL is required.")
     url = utils.ensure_url_scheme(url)
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        plInfo=ydl.extract_info(url, download=False)
-        if 'entries' in plInfo:
-            for track in plInfo['entries']:
-                track_urls=[track.get('url') for track in plInfo['entries']]
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            plInfo=ydl.extract_info(url, download=False)
+    except Exception as exc:
+        raise RuntimeError("Could not fetch playlist tracks. Please check the URL and your internet connection.") from exc
+
+    if not isinstance(plInfo, dict):
+        return []
+
+    entries = plInfo.get('entries') or []
+    if not entries:
+        return []
+
+    track_urls=[]
+    for track in entries:
+        if not isinstance(track, dict):
+            continue
+        track_url = track.get('url')
+        if not track_url:
+            continue
+        if isinstance(track_url, str) and track_url.startswith(("https://", "http://")):
+            track_urls.append(track_url)
+            continue
+        video_id = track.get('id')
+        if video_id:
+            track_urls.append(f"https://music.youtube.com/watch?v={video_id}")
+        else:
+            track_urls.append(utils.ensure_url_scheme(str(track_url)))
     return track_urls
 
 ###Retrieve data for a single song (title, duration, etc.)###
 
 def get_song_info(url):
+    if not isinstance(url, str) or not url.strip():
+        raise ValueError("Song URL is required.")
     url = utils.ensure_url_scheme(url)
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        songInfo=ydl.extract_info(url, download=False)
-        res={
-            'title':songInfo.get('title'),
-            'duration':songInfo.get('duration'),
-            'uploader':songInfo.get('uploader'),
-            'view': songInfo.get('view_count'),
-            'date': songInfo.get('upload_date'),
-            'release': songInfo.get('release_date'),
-            'artists': songInfo.get('artists'),
-            'album': songInfo.get('album')
-        }
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            songInfo=ydl.extract_info(url, download=False)
+    except Exception as exc:
+        raise RuntimeError("Could not fetch song details. Please check the URL and your internet connection.") from exc
+
+    if not isinstance(songInfo, dict):
+        raise RuntimeError("Could not fetch song details. The song may be private, deleted, or unavailable.")
+
+    res={
+        'title':songInfo.get('title'),
+        'duration':songInfo.get('duration'),
+        'uploader':songInfo.get('uploader'),
+        'view': songInfo.get('view_count'),
+        'date': songInfo.get('upload_date'),
+        'release': songInfo.get('release_date'),
+        'artists': songInfo.get('artists'),
+        'album': songInfo.get('album')
+    }
     return res
 
 ###DOWNLOAD PLAYLIST###
 
 def download_playlist(url, output_folder=".", audio_format="mp3"):
+    if not isinstance(output_folder, str) or not output_folder.strip():
+        raise ValueError("Output folder path cannot be empty.")
+    if not isinstance(audio_format, str) or not audio_format.strip():
+        raise ValueError("Audio format cannot be empty.")
+
     url = utils.ensure_url_scheme(url)
     urls=get_song_urls_from_playlist(url)
+    if not urls:
+        raise ValueError("No downloadable tracks found in this playlist. It may be empty, private, or unavailable.")
+
     metadata=get_playlist_info(url)
-    title=metadata['title']
+    title=metadata.get('title') or 'playlist'
     title=utils.sanitize_filename(title)
     utils.create_folder(title, output_folder)
     for track in urls:
-        downloader.download_audio(track, f"{output_folder}/{title}", audio_format)
+        try:
+            downloader.download_audio(track, f"{output_folder}/{title}", audio_format)
+        except Exception as exc:
+            raise RuntimeError("A track failed to download. Please try again or check your connection.") from exc
     
 
 if __name__ == "__main__":
