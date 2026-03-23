@@ -1,7 +1,7 @@
 <div align="center">
   <img src="assets/dRose.png" alt="dragoulaRose Logo" width="200" height="auto">
   
-  <h1>dRose v1.1.0</h1>
+  <h1>dRose v1.1.1</h1>
   
   <p>
     <b>The Ultimate YouTube Music Downloader</b>
@@ -64,6 +64,11 @@ source venv/bin/activate
 **For regular use:**
 ```bash
 pip install -e .
+```
+
+**For development (tests, tooling):**
+```bash
+pip install -e ".[dev]"
 ```
 
 **For development (with web features):**
@@ -140,14 +145,24 @@ drose song "SONG_URL" --list --all
 drose config show
 
 # Set default output folder
-drose config set output_folder "./downloads"
+drose config set --output-folder "./downloads"
 
 # Set default audio format
-drose config set audio_format "mp3"
+drose config set --audio-format "mp3"
+
+# Set both in one command
+drose config set --output-folder "./downloads" --audio-format "m4a"
+
+# Read a single setting
+drose config get output_folder
 
 # Reset to default configuration
 drose config reset
 ```
+
+Config values are merged from:
+- Defaults: `cli/config.default.json`
+- User overrides: `~/.drose/config.json`
 
 #### System Health Check
 
@@ -174,6 +189,22 @@ drose --help
 
 # Get help for a specific command
 drose playlist --help
+```
+
+---
+
+## ✅ Testing
+
+Run tests locally:
+
+```bash
+pytest -q
+```
+
+Optional coverage report:
+
+```bash
+pytest --cov=cli --cov=core --cov-report=term-missing
 ```
 
 ---
@@ -223,6 +254,15 @@ dRose/
 
 - The project uses a virtual environment for dependency management
 - For Windows users, `.DS_Store` files are not relevant
+
+---
+
+## 🧰 Troubleshooting
+
+- Run `drose doctor` to verify system compatibility and required dependencies.
+- Confirm Python version is `3.12+`.
+- If FFmpeg is not available system-wide, `imageio-ffmpeg` is used as a fallback.
+- Some downloads may fail due to unavailable/private videos, rate limits, or network restrictions.
 
 ---
 
