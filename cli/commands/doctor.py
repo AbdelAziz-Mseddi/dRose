@@ -39,6 +39,8 @@ def check():
         console.print(
             "[#347c17]☑  Operating System is supported.[/#347c17]"
         )  # of course
+    elif ( os_name not in supportedOS.keys() ) or ( not supportedOS[os_name].get("tested") ) :
+        console.print("[#ffd700]⚠  Proceed with caution, untested OS.[/#ffd700]")
     elif supportedOS[os_name].get("tested") and int(os_release) < supportedOS[
         os_name
     ].get("min"):
@@ -46,8 +48,6 @@ def check():
             f"[#b22222]✖  {os_name} release not supported. Please upgrade to {supportedOS[os_name].get('min')} minimum.[/#b22222]"
         )
         con = False
-    elif not supportedOS[os_name].get("tested"):
-        console.print("[#ffd700]⚠  Proceed with caution, untested OS.[/#ffd700]")
     else:
         console.print("[#347c17]☑  Operating System is supported.[/#347c17]")
     # check Python interpreter
