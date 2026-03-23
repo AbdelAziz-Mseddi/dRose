@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "drose"
-version = "1.0.0"
-description = "Download YouTube Music playlists as MP3"
+version = "1.1.1"
+description = "Download YouTube Music playlists and songs, wherever, however."
 requires-python = ">=3.12"
 dependencies = [
     "typer[all]>=0.21.1,<1.0",
