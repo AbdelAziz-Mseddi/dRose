@@ -3,15 +3,16 @@ from . import utils
 ###
 
 ydl_opts = {
-        'extract_flat': True,   # Don't download videos, just get valid URLs/titles
-        'dump_single_json': True,   # mimic the JSON output format
-        'quiet': True,  # Suppress standard output
-        'no_warnings': True,  # Suppress warnings
-        'ignoreerrors': True,   # Skip private/deleted videos without stopping
-    }
+    "extract_flat": True,  # Don't download videos, just get valid URLs/titles
+    "dump_single_json": True,  # mimic the JSON output format
+    "quiet": True,  # Suppress standard output
+    "no_warnings": True,  # Suppress warnings
+    "ignoreerrors": True,  # Skip private/deleted videos without stopping
+}
 
 import yt_dlp
 ###Retrieve playlist title, number of songs, and every song title###
+
 
 def get_playlist_info(url):
     if not isinstance(url, str) or not url.strip():
@@ -19,24 +20,34 @@ def get_playlist_info(url):
     url = utils.ensure_url_scheme(url)
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            plInfo=ydl.extract_info(url, download=False)
+            plInfo = ydl.extract_info(url, download=False)
     except Exception as exc:
-        raise RuntimeError("Could not fetch playlist details. Please check the URL and your internet connection.") from exc
+        raise RuntimeError(
+            "Could not fetch playlist details. Please check the URL and your internet connection."
+        ) from exc
 
     if not isinstance(plInfo, dict):
-        raise RuntimeError("Could not fetch playlist details. The playlist may be private, deleted, or unavailable.")
+        raise RuntimeError(
+            "Could not fetch playlist details. The playlist may be private, deleted, or unavailable."
+        )
 
-    entries = plInfo.get('entries') or []
-    res={
-        "duration":plInfo.get('duration'),
-        "uploader":plInfo.get('uploader'),
-        "title":plInfo.get('title'),
-        "size":plInfo.get('playlist_count') or len(entries),
-        "tracks":[( track.get('title'), track.get('duration'), track.get('uploader')) for track in entries if isinstance(track, dict)]
+    entries = plInfo.get("entries") or []
+    res = {
+        "duration": plInfo.get("duration"),
+        "uploader": plInfo.get("uploader"),
+        "title": plInfo.get("title"),
+        "size": plInfo.get("playlist_count") or len(entries),
+        "tracks": [
+            (track.get("title"), track.get("duration"), track.get("uploader"))
+            for track in entries
+            if isinstance(track, dict)
+        ],
     }
     return res
 
+
 ###Return a list of URLs for all songs in the playlist###
+
 
 def get_song_urls_from_playlist(url):
     if not isinstance(url, str) or not url.strip():
@@ -44,35 +55,39 @@ def get_song_urls_from_playlist(url):
     url = utils.ensure_url_scheme(url)
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            plInfo=ydl.extract_info(url, download=False)
+            plInfo = ydl.extract_info(url, download=False)
     except Exception as exc:
-        raise RuntimeError("Could not fetch playlist tracks. Please check the URL and your internet connection.") from exc
+        raise RuntimeError(
+            "Could not fetch playlist tracks. Please check the URL and your internet connection."
+        ) from exc
 
     if not isinstance(plInfo, dict):
         return []
 
-    entries = plInfo.get('entries') or []
+    entries = plInfo.get("entries") or []
     if not entries:
         return []
 
-    track_urls=[]
+    track_urls = []
     for track in entries:
         if not isinstance(track, dict):
             continue
-        track_url = track.get('url')
+        track_url = track.get("url")
         if not track_url:
             continue
         if isinstance(track_url, str) and track_url.startswith(("https://", "http://")):
             track_urls.append(track_url)
             continue
-        video_id = track.get('id')
+        video_id = track.get("id")
         if video_id:
             track_urls.append(f"https://music.youtube.com/watch?v={video_id}")
         else:
             track_urls.append(utils.ensure_url_scheme(str(track_url)))
     return track_urls
 
+
 ###Retrieve data for a single song (title, duration, etc.)###
+
 
 def get_song_info(url):
     if not isinstance(url, str) or not url.strip():
@@ -80,26 +95,32 @@ def get_song_info(url):
     url = utils.ensure_url_scheme(url)
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            songInfo=ydl.extract_info(url, download=False)
+            songInfo = ydl.extract_info(url, download=False)
     except Exception as exc:
-        raise RuntimeError("Could not fetch song details. Please check the URL and your internet connection.") from exc
+        raise RuntimeError(
+            "Could not fetch song details. Please check the URL and your internet connection."
+        ) from exc
 
     if not isinstance(songInfo, dict):
-        raise RuntimeError("Could not fetch song details. The song may be private, deleted, or unavailable.")
+        raise RuntimeError(
+            "Could not fetch song details. The song may be private, deleted, or unavailable."
+        )
 
-    res={
-        'title':songInfo.get('title'),
-        'duration':songInfo.get('duration'),
-        'uploader':songInfo.get('uploader'),
-        'view': songInfo.get('view_count'),
-        'date': songInfo.get('upload_date'),
-        'release': songInfo.get('release_date'),
-        'artists': songInfo.get('artists'),
-        'album': songInfo.get('album')
+    res = {
+        "title": songInfo.get("title"),
+        "duration": songInfo.get("duration"),
+        "uploader": songInfo.get("uploader"),
+        "view": songInfo.get("view_count"),
+        "date": songInfo.get("upload_date"),
+        "release": songInfo.get("release_date"),
+        "artists": songInfo.get("artists"),
+        "album": songInfo.get("album"),
     }
     return res
 
+
 ###DOWNLOAD PLAYLIST###
+
 
 def download_playlist(url, output_folder=".", audio_format="mp3"):
     if not isinstance(output_folder, str) or not output_folder.strip():
@@ -108,23 +129,39 @@ def download_playlist(url, output_folder=".", audio_format="mp3"):
         raise ValueError("Audio format cannot be empty.")
 
     url = utils.ensure_url_scheme(url)
-    urls=get_song_urls_from_playlist(url)
+    urls = get_song_urls_from_playlist(url)
     if not urls:
-        raise ValueError("No downloadable tracks found in this playlist. It may be empty, private, or unavailable.")
+        raise ValueError(
+            "No downloadable tracks found in this playlist. It may be empty, private, or unavailable."
+        )
 
-    metadata=get_playlist_info(url)
-    title=metadata.get('title') or 'playlist'
-    title=utils.sanitize_filename(title)
+    metadata = get_playlist_info(url)
+    title = metadata.get("title") or "playlist"
+    title = utils.sanitize_filename(title)
     utils.create_folder(title, output_folder)
     for track in urls:
         try:
             downloader.download_audio(track, f"{output_folder}/{title}", audio_format)
         except Exception as exc:
-            raise RuntimeError("A track failed to download. Please try again or check your connection.") from exc
-    
+            raise RuntimeError(
+                "A track failed to download. Please try again or check your connection."
+            ) from exc
+
 
 if __name__ == "__main__":
-    get_playlist_info("https://music.youtube.com/playlist?list=PLVe3Pb0zUL07V3hhdzjTsaiw7rp7Sg7eD&si=zY7y170jl-TAVuUy")
-    print( get_song_urls_from_playlist("https://music.youtube.com/playlist?list=PLVe3Pb0zUL07V3hhdzjTsaiw7rp7Sg7eD&si=zY7y170jl-TAVuUy") ) 
-    print(get_song_info("https://music.youtube.com/watch?v=4tJKyfXCDUE&si=aT8MPsNeI_7kDeWa"))
-    download_playlist("https://music.youtube.com/playlist?list=PLVe3Pb0zUL04fRNvYJnpg5MFpzcoeT8qb&si=z51v5yyTOxzOZHVu")
+    get_playlist_info(
+        "https://music.youtube.com/playlist?list=PLVe3Pb0zUL07V3hhdzjTsaiw7rp7Sg7eD&si=zY7y170jl-TAVuUy"
+    )
+    print(
+        get_song_urls_from_playlist(
+            "https://music.youtube.com/playlist?list=PLVe3Pb0zUL07V3hhdzjTsaiw7rp7Sg7eD&si=zY7y170jl-TAVuUy"
+        )
+    )
+    print(
+        get_song_info(
+            "https://music.youtube.com/watch?v=4tJKyfXCDUE&si=aT8MPsNeI_7kDeWa"
+        )
+    )
+    download_playlist(
+        "https://music.youtube.com/playlist?list=PLVe3Pb0zUL04fRNvYJnpg5MFpzcoeT8qb&si=z51v5yyTOxzOZHVu"
+    )

@@ -25,7 +25,7 @@ def get_config() -> dict:
     defaults = _read_json(DEFAULT_CONFIG_FILE)
     overrides = _read_json(USER_CONFIG_FILE)
     merged = {**defaults, **overrides}
-    return (merged,defaults==merged)
+    return (merged, defaults == merged)
 
 
 def set_config(updates: dict) -> dict:
@@ -38,6 +38,7 @@ def set_config(updates: dict) -> dict:
 
 def get_setting(name: str):
     return get_config()[0].get(name)
+
 
 def reset_config():
     """Delete user config file to restore defaults"""

@@ -4,131 +4,179 @@ from rich.console import Console
 import sys
 import importlib.metadata
 
-app=typer.Typer(
+app = typer.Typer(
     name="doctor",
-    help="i am here to check your device's compatibility for Top-Tier Music :p"
+    help="i am here to check your device's compatibility for Top-Tier Music :p",
 )
-console=Console()
-supportedOS={
-    "Windows":{"tested": True, "min": 7},
-    "Linux": {"tested": True, "min": 112263},#i am the best mini-series, who am i? :p
-    "Darwin": {"tested": False, "min": 10.9} #macOS
+console = Console()
+supportedOS = {
+    "Windows": {"tested": True, "min": 7},
+    "Linux": {"tested": True, "min": 112263},  # i am the best mini-series, who am i? :p
+    "Darwin": {"tested": False, "min": 10.9},  # macOS
 }
+
 
 @app.callback(invoke_without_command=True)
 def check():
     """check system requirements"""
-    console.print("[#6594B1]🥀 You summoned the doctor command? Have no fear, it won't hurt.[/#6594B1]")
-    #check system architecture and operating system
+    console.print(
+        "[#6594B1]🥀 You summoned the doctor command? Have no fear, it won't hurt.[/#6594B1]"
+    )
+    # check system architecture and operating system
     console.print("[CHECKING TOUSKIE SYSTEM]")
-    os_name=platform.system()
-    os_release=platform.release()
-    archi=platform.architecture()[0]
-    con=True
-    if (archi != "64bit"):
-        console.print("[#b22222]✖  Architecture not supported. Please use 64-bit.[/#b22222]")
-        con=False
-    else :
-        console.print("[#347c17]☑  System Architecture is supported.[/#347c17]")
-    if(os_name=="Linux"):
-        console.print("[#347c17]☑  Operating System is supported.[/#347c17]") #of course
-    elif( supportedOS[os_name].get("tested") and int(os_release) < supportedOS[os_name].get("min") ):
-        console.print(f"[#b22222]✖  {os_name} release not supported. Please upgrade to {supportedOS[os_name].get("min")} minimum.[/#b22222]")
-        con=False
-    elif ( not supportedOS[os_name].get("tested") ):
-        console.print("[#ffd700]⚠  Proceed with caution, untested OS.[/#ffd700]")
-    else :
-        console.print("[#347c17]☑  Operating System is supported.[/#347c17]")
-    #check Python interpreter
-    console.print("[CHECKING PYTHON INTERPRETER]")
-    min_major=3
-    min_minor=12
-    version_tuple=sys.version_info
-    major=version_tuple.major
-    minor=version_tuple.minor
-    if( major < min_major ):
-        console.print("[#b22222]✖  Python version not supported. Minimum version is <3.12>.[/#b22222]")
-        con=False
-    elif( minor < min_minor ):
-        console.print("[#b22222]✖  Python version not supported. Minimum version is <3.12>.[/#b22222]")
-        con=False
+    os_name = platform.system()
+    os_release = platform.release()
+    archi = platform.architecture()[0]
+    con = True
+    if archi != "64bit":
+        console.print(
+            "[#b22222]✖  Architecture not supported. Please use 64-bit.[/#b22222]"
+        )
+        con = False
     else:
-        console.print(f"[#347c17]☑  Your Python version is supported.[/#347c17]")
-    #check python packages (requirements) are imported
+        console.print("[#347c17]☑  System Architecture is supported.[/#347c17]")
+    if os_name == "Linux":
+        console.print(
+            "[#347c17]☑  Operating System is supported.[/#347c17]"
+        )  # of course
+    elif supportedOS[os_name].get("tested") and int(os_release) < supportedOS[
+        os_name
+    ].get("min"):
+        console.print(
+            f"[#b22222]✖  {os_name} release not supported. Please upgrade to {supportedOS[os_name].get('min')} minimum.[/#b22222]"
+        )
+        con = False
+    elif not supportedOS[os_name].get("tested"):
+        console.print("[#ffd700]⚠  Proceed with caution, untested OS.[/#ffd700]")
+    else:
+        console.print("[#347c17]☑  Operating System is supported.[/#347c17]")
+    # check Python interpreter
+    console.print("[CHECKING PYTHON INTERPRETER]")
+    min_major = 3
+    min_minor = 12
+    version_tuple = sys.version_info
+    major = version_tuple.major
+    minor = version_tuple.minor
+    if major < min_major:
+        console.print(
+            "[#b22222]✖  Python version not supported. Minimum version is <3.12>.[/#b22222]"
+        )
+        con = False
+    elif minor < min_minor:
+        console.print(
+            "[#b22222]✖  Python version not supported. Minimum version is <3.12>.[/#b22222]"
+        )
+        con = False
+    else:
+        console.print("[#347c17]☑  Your Python version is supported.[/#347c17]")
+    # check python packages (requirements) are imported
     console.print("[CHECKING TOUSKIE PYTHON LIBRAIRIES]")
     packages = {
-        "typer": ["0.21.1", "1.0.0", False, "typer"],   #(min, max, import successful, import alias)
+        "typer": [
+            "0.21.1",
+            "1.0.0",
+            False,
+            "typer",
+        ],  # (min, max, import successful, import alias)
         "rich": ["14.2.0", "15.0.0", False, "rich"],
         "yt-dlp": ["2025.12.8", "2026.0.0", False, "yt_dlp"],
         "imageio-ffmpeg": ["0.6.0", "0.7.0", False, "imageio_ffmpeg"],
         "pyfiglet": ["1.0.4", "2.0.0", False, "pyfiglet"],
         "ascii-magic": ["2.7.4", "3.0.0", False, "ascii_magic"],
-        # "tqdm": ["4.66.1", "4.66.1", False, "tqdm"], 
+        # "tqdm": ["4.66.1", "4.66.1", False, "tqdm"],
         # "python-multipart": ["0.0.9", "0.0.10", False, "multipart"],
-        # "PyExecJS": ["1.5.1", "1.6.0",  False, "execjs"] 
+        # "PyExecJS": ["1.5.1", "1.6.0",  False, "execjs"]
     }
     for package in packages.keys():
         try:
             __import__(packages[package][3])
-            packages[package][2]=True
-        except ImportError as e:
-            console.print(f"[#b22222]✖  Required package missing. Please install {package}.[/#b22222]")
-            con=False
-    #check python packages versions
+            packages[package][2] = True
+        except ImportError:
+            console.print(
+                f"[#b22222]✖  Required package missing. Please install {package}.[/#b22222]"
+            )
+            con = False
+    # check python packages versions
     for package in packages:
         if packages[package][2]:
-            act_ver=parse_version( importlib.metadata.version(package) )
-            min_ver=parse_version( packages[package][0] )
-            max_ver=parse_version( packages[package][1] )
-            if(min_ver==max_ver):
-                if( act_ver!=min_ver ):
-                    console.print(f"[#ffd700]⚠  {package} version may cause problems. Recommended vesion= {packages[package][0]}.[/#ffd700]")                
+            act_ver = parse_version(importlib.metadata.version(package))
+            min_ver = parse_version(packages[package][0])
+            max_ver = parse_version(packages[package][1])
+            if min_ver == max_ver:
+                if act_ver != min_ver:
+                    console.print(
+                        f"[#ffd700]⚠  {package} version may cause problems. Recommended vesion= {packages[package][0]}.[/#ffd700]"
+                    )
                 else:
-                    console.print(f"[#347c17]☑  {package} is installed, version is compatible.[/#347c17]")
-            elif(act_ver<min_ver or act_ver>max_ver):
-                console.print(f"[#ffd700]⚠  {package} version may cause problems. Recommended version >= {packages[package][0]} and < {packages[package][1]}.[/#ffd700]")
+                    console.print(
+                        f"[#347c17]☑  {package} is installed, version is compatible.[/#347c17]"
+                    )
+            elif act_ver < min_ver or act_ver > max_ver:
+                console.print(
+                    f"[#ffd700]⚠  {package} version may cause problems. Recommended version >= {packages[package][0]} and < {packages[package][1]}.[/#ffd700]"
+                )
             else:
-                console.print(f"[#347c17]☑  {package} is installed, version is compatible.[/#347c17]")
-    #testing typer
+                console.print(
+                    f"[#347c17]☑  {package} is installed, version is compatible.[/#347c17]"
+                )
+    # testing typer
     console.print("[CHECKING PYTHON LIBRAIRIES WORK]")
     try:
         import typer
-        app=typer.Typer(name="ozymandias")
+
+        app = typer.Typer(name="ozymandias")
+
         @app.command()
         def bcs(name: str, sad: bool = False):
-            quote=f"There are so many stars visible in New Mexico,{name}. I will walk out there to get a better look." if sad else f"I travel in worlds you can't even imagine, {name}! You can't conceive of what I'm capable of! I'm so far beyond you! I'm like a god in human clothing! Lightning bolts shoot from my fingertips!"
+            quote = (
+                f"There are so many stars visible in New Mexico,{name}. I will walk out there to get a better look."
+                if sad
+                else f"I travel in worlds you can't even imagine, {name}! You can't conceive of what I'm capable of! I'm so far beyond you! I'm like a god in human clothing! Lightning bolts shoot from my fingertips!"
+            )
             typer.echo(quote)
+
         from typer.testing import CliRunner
-        runner=CliRunner()
-        result=runner.invoke(app,["kim", "--sad"])
-        if("There are so many stars visible in New Mexico,kim. I will walk out there to get a better look." in result.stdout):
-            console.print(f"[#347c17]☑  Typer runs correctly.[/#347c17]")
+
+        runner = CliRunner()
+        result = runner.invoke(app, ["kim", "--sad"])
+        if (
+            "There are so many stars visible in New Mexico,kim. I will walk out there to get a better look."
+            in result.stdout
+        ):
+            console.print("[#347c17]☑  Typer runs correctly.[/#347c17]")
         else:
-           console.print(f"[#ffd700]⚠  Typer runs but there may be problems.[/#ffd700]")
-    except Exception as e:
-            console.print(f"[#b22222]✖  Typer isn't running correctly.[/#b22222]")
-            con=False
-    #testing rich
-    console.print(f"[#347c17]☑  You are seeing colored output, so Rich probably works correctly.[/#347c17]")
-    #testing yt-dlp
+            console.print("[#ffd700]⚠  Typer runs but there may be problems.[/#ffd700]")
+    except Exception:
+        console.print("[#b22222]✖  Typer isn't running correctly.[/#b22222]")
+        con = False
+    # testing rich
+    console.print(
+        "[#347c17]☑  You are seeing colored output, so Rich probably works correctly.[/#347c17]"
+    )
+    # testing yt-dlp
     try:
         import yt_dlp
+
         ydl_opts = {
-            'format':"bestaudio/best",  # Format Selection: Best audio only
-            'quiet': True,  # Suppress standard output
-            'no_warnings': True,  # Suppress warnings
-            'ignoreerrors': True,   # Skip private/deleted videos without stopping
+            "format": "bestaudio/best",  # Format Selection: Best audio only
+            "quiet": True,  # Suppress standard output
+            "no_warnings": True,  # Suppress warnings
+            "ignoreerrors": True,  # Skip private/deleted videos without stopping
         }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            song=ydl.extract_info("https://music.youtube.com/watch?v=Xr1qIqtnziI&si=cymnEC-gD6xEUZw0", download=False) #I hear her voice, She laughs now
-            console.print(f"[#347c17]☑  Yt-Dlp runs correctly.[/#347c17]")
-    except Exception as e:
-        console.print(f"[#b22222]✖  Yt-Dlp isn't running correctly.[/#b22222]")
-        con=False
-    #testing ffmpeg
+            song = ydl.extract_info(
+                "https://music.youtube.com/watch?v=Xr1qIqtnziI&si=cymnEC-gD6xEUZw0",
+                download=False,
+            )  # I hear her voice, She laughs now
+            console.print("[#347c17]☑  Yt-Dlp runs correctly.[/#347c17]")
+    except Exception:
+        console.print("[#b22222]✖  Yt-Dlp isn't running correctly.[/#b22222]")
+        con = False
+    # testing ffmpeg
     console.print("[CHECKING FFMPEG WORKS]")
     import shutil
     from pathlib import Path
+
     ffmpeg_path = shutil.which("ffmpeg")
     if not ffmpeg_path:
         common_paths = [
@@ -144,68 +192,84 @@ def check():
     if not ffmpeg_path:
         try:
             import imageio_ffmpeg
+
             ffmpeg_path = imageio_ffmpeg.get_ffmpeg_exe()
-        except Exception as e:
+        except Exception:
             ffmpeg_path = None
     if not ffmpeg_path:
-        console.print(f"[#b22222]✖  Ffmpeg isn't found or running correctly.[/#b22222]")
-        con=False
+        console.print("[#b22222]✖  Ffmpeg isn't found or running correctly.[/#b22222]")
+        con = False
     else:
         try:
             import subprocess
-            result = subprocess.run([ffmpeg_path, "-version"], capture_output=True, timeout=5)
+
+            result = subprocess.run(
+                [ffmpeg_path, "-version"], capture_output=True, timeout=5
+            )
             if result.returncode == 0:
-                console.print(f"[#347c17]☑  Ffmpeg runs correctly.[/#347c17]")
+                console.print("[#347c17]☑  Ffmpeg runs correctly.[/#347c17]")
             else:
-                console.print(f"[#b22222]✖  Ffmpeg isn't running correctly.[/#b22222]")
-                con=False
-        except Exception as e:
-            console.print(f"[#b22222]✖  Ffmpeg isn't running correctly.[/#b22222]")
-            con=False
-    #testing permissions
+                console.print("[#b22222]✖  Ffmpeg isn't running correctly.[/#b22222]")
+                con = False
+        except Exception:
+            console.print("[#b22222]✖  Ffmpeg isn't running correctly.[/#b22222]")
+            con = False
+    # testing permissions
     console.print("[CHECKING FILESYSTEM & PERMISSIONS]")
     import os
+
     try:
         os.makedirs("temp", exist_ok=True)
-        console.print(f"[#347c17]☑  I can make directories :).[/#347c17]")
+        console.print("[#347c17]☑  I can make directories :).[/#347c17]")
     except:
-        console.print(f"[#b22222]✖   I don't have permission to make directories :(.[/#b22222]")
-        con=False
+        console.print(
+            "[#b22222]✖   I don't have permission to make directories :(.[/#b22222]"
+        )
+        con = False
     try:
         test_file = os.path.join("temp", ".write_test.tmp")
         with open(test_file, "w") as f:
             f.write("test")
         os.remove(test_file)
-        console.print(f"[#347c17]☑  I can make files :).[/#347c17]")
+        console.print("[#347c17]☑  I can make files :).[/#347c17]")
     except:
-        console.print(f"[#b22222]✖   I don't have permission to make files :(.[/#b22222]")
-        con=False
-    #testing network and tls
+        console.print(
+            "[#b22222]✖   I don't have permission to make files :(.[/#b22222]"
+        )
+        con = False
+    # testing network and tls
     console.print("[CHECKING NETWORK CONNECTION]")
-    import socket, ssl
-    host="www.google.com"
-    port=443
-    timeout=5
+    import socket
+    import ssl
+
+    host = "www.google.com"
+    port = 443
+    timeout = 5
     try:
-        context=ssl.create_default_context()
-        with socket.create_connection( (host, port), timeout=timeout ) as sock:
+        context = ssl.create_default_context()
+        with socket.create_connection((host, port), timeout=timeout) as sock:
             with context.wrap_socket(sock, server_hostname=host) as ssock:
-                console.print(f"[#347c17]☑  Da device iz connected zuccessfully.[/#347c17]")
+                console.print(
+                    "[#347c17]☑  Da device iz connected zuccessfully.[/#347c17]"
+                )
     except:
-        con=False
-        console.print(f"[#b22222]✖   I couldn't connect to the network :(.[/#b22222]")
-    #testing configuration file exists
+        con = False
+        console.print("[#b22222]✖   I couldn't connect to the network :(.[/#b22222]")
+    # testing configuration file exists
     console.print("[CHECKING CONFIGURATION SANITY]")
     from pathlib import Path
     import json
+
     DEFAULT_CONFIG_FILE = Path(__file__).parent.parent / "config.default.json"
     USER_CONFIG_FILE = Path.home() / ".drose" / "config.json"
     try:
         with open(DEFAULT_CONFIG_FILE, "r") as f:
             default_config = json.load(f)
-        console.print(f"[#347c17]☑  Default config file found.[/#347c17]")
-    except Exception as e:
-        console.print(f"[#b22222]✖  Default config file not found or corrupted.[/#b22222]")
+        console.print("[#347c17]☑  Default config file found.[/#347c17]")
+    except Exception:
+        console.print(
+            "[#b22222]✖  Default config file not found or corrupted.[/#b22222]"
+        )
         con = False
         default_config = {}
     user_config = {}
@@ -213,30 +277,39 @@ def check():
         try:
             with open(USER_CONFIG_FILE, "r") as f:
                 user_config = json.load(f)
-            console.print(f"[#347c17]☑  User config file found and valid.[/#347c17]")
-        except Exception as e:
-            console.print(f"[#b22222]✖  User config file is corrupted.[/#b22222]")
+            console.print("[#347c17]☑  User config file found and valid.[/#347c17]")
+        except Exception:
+            console.print("[#b22222]✖  User config file is corrupted.[/#b22222]")
             con = False
     else:
-        console.print(f"[#347c17]☑  Using defaults (no user config overrides).[/#347c17]")
+        console.print(
+            "[#347c17]☑  Using defaults (no user config overrides).[/#347c17]"
+        )
     merged_config = {**default_config, **user_config}
     valid_keys = {"output_folder", "audio_format"}
     for key in merged_config.keys():
         if key not in valid_keys:
-            console.print(f"[#ffd700]⚠  Unknown config key: '{key}'. Ignoring.[/#ffd700]")
-    
+            console.print(
+                f"[#ffd700]⚠  Unknown config key: '{key}'. Ignoring.[/#ffd700]"
+            )
+
     valid_formats = ["mp3", "wav", "m4a", "flac", "opus"]
     if "audio_format" in merged_config:
         if merged_config["audio_format"] not in valid_formats:
-            console.print(f"[#b22222]✖  Invalid audio_format: '{merged_config['audio_format']}'. Must be one of: {', '.join(valid_formats)}.[/#b22222]")
+            console.print(
+                f"[#b22222]✖  Invalid audio_format: '{merged_config['audio_format']}'. Must be one of: {', '.join(valid_formats)}.[/#b22222]"
+            )
             con = False
         else:
-            console.print(f"[#347c17]☑  Audio format is valid: {merged_config['audio_format']}.[/#347c17]")
-    if (con==False):
+            console.print(
+                f"[#347c17]☑  Audio format is valid: {merged_config['audio_format']}.[/#347c17]"
+            )
+    if con == False:
         raise typer.Exit(code=1)
     else:
-        console.print(f"[#0034c3]🥀 Welcome to Seb's...[/#0034c3]")
+        console.print("[#0034c3]🥀 Welcome to Seb's...[/#0034c3]")
 
-#parse version to compare    
+
+# parse version to compare
 def parse_version(version):
     return tuple(map(int, version.split(".")))
