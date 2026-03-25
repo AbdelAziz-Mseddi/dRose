@@ -20,14 +20,7 @@ def sanitize_filename(name):
 def sanitize_filenames(names):
     newStrings = []
     for name in names:
-        newString = []
-        for c in name:
-            if c in ["/", "\\", ":", "*", "?", '"', "<", ">", "|"]:
-                newString.append("ø")
-            else:
-                newString.append(c)
-        newNew = "".join(newString)
-        newNew = newNew.strip()
+        newNew = sanitize_filename(name)
         newStrings.append(newNew)
     return newStrings
 
@@ -197,6 +190,35 @@ def ensure_url_scheme(url):
         else f"https://{url}"
     )
     return url
+
+
+###Determine if URL links to playlist or single song###
+# i can use simple 'in' operator but i'm using  'urllib.parse.urlparse + parse_qs' because i want to learn new things :3
+# and i'm free :3
+def is_song_url(url: str) -> tuple[bool, str | None]:
+    """ø playlist video url contains only 'list=' .
+    ø single:( video url contains 'watch?v=' with an 11-character video ID
+    it could also contain 'list=' if it was opened from the context of a playlist.
+    """
+    from urllib.parse import urlparse, parse_qs
+    from .playlist import get_playlist_info
+
+    # split the url into 6 parts: scheme(http/s), netloc(www.example.com), path(/sub/subsub), query(x=something%y=anotherthing), fragment(after '#', to jump to a page section)
+    # for our case, we need the query part that either contains 'v=something' or 'list=anotherthing' or both
+    parts = urlparse(url)
+    query_params = parse_qs(parts.query)
+    if "v" in query_params():
+        if "list" in query_params():
+            inter = get_playlist_info(url)
+            merda = inter.get("title")
+            title = merda
+            return (True, title)
+        return (True, None)
+    else:
+        inter = get_playlist_info(url)
+        merda = inter.get("title")
+        title = merda
+        return (False, title)
 
 
 if __name__ == "__main__":
