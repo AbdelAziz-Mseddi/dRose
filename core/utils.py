@@ -207,8 +207,8 @@ def is_song_url(url: str) -> tuple[bool, str | None]:
     # for our case, we need the query part that either contains 'v=something' or 'list=anotherthing' or both
     parts = urlparse(url)
     query_params = parse_qs(parts.query)
-    if "v" in query_params():
-        if "list" in query_params():
+    if "v" in query_params:
+        if "list" in query_params:
             inter = get_playlist_info(url)
             merda = inter.get("title")
             title = merda
