@@ -8,6 +8,7 @@ from core.utils import (
     format_date,
     spinner2016,
     spinner2017,
+    is_song_url
 )
 from core.playlist import download_playlist, get_playlist_info, get_song_info
 from core.downloader import download_audio
@@ -152,6 +153,23 @@ def playlist(
     listt: bool = typer.Option(False, "--list", "-l", help="List Songs + Informations"),
 ):
     """Download and Manage Playlists"""
+    try:
+        is_song, _ = is_song_url(url)
+    except Exception as exc:
+        raise typer.BadParameter(str(exc)) from exc
+
+    if is_song:
+        console.print("[#B8DB80]Looks like it's a song URL, not a playlist URL.[/#B8DB80]")
+        console.print("[#B8DB80]Hold your horse, i'm gonna bootleg it 🏎️[/#B8DB80]")
+        song(
+            url=url,
+            alll=alll,
+            listt=listt,
+            output_dir=output_dir,
+            audio_format=audio_format,
+        )
+        return
+
     if listt:
         what = "Playlist"
         with spinner2016("Fetching playlist details"):
@@ -176,7 +194,7 @@ def playlist(
                 artist = ", ".join(artist)
             else:
                 artist = artist[0]
-        console.print(f"[#B8DB80]Point Info on your beloved {what}🌹[/#B8DB80]")
+        console.print(f"[#B8DB80]Point Info on your beloved {what} 🌹[/#B8DB80]")
         console.print(f"[#6594B1]ø {what} Title: [/#6594B1]", title)
         console.print(f"[#6594B1]ø {preArtist}[/#6594B1]", artist)
         console.print("[#6594B1]ø Number of Tracks: [/#6594B1]", box["size"])
@@ -239,8 +257,25 @@ def song(
     ),
 ):
     """Download and Manage Songs"""
+    try:
+        is_song, _ = is_song_url(url)
+    except Exception as exc:
+        raise typer.BadParameter(str(exc)) from exc
+
+    if not is_song:
+        console.print("[#B8DB80]Looks like it's a playlist URL, not a song URL.[/#B8DB80]")
+        console.print("[#B8DB80]Hold your horse, i'm gonna bootleg it 🏎️[/#B8DB80]")
+        playlist(
+            url=url,
+            output_dir=output_dir,
+            audio_format=audio_format,
+            alll=alll,
+            listt=listt,
+        )
+        return
+
     if listt:
-        console.print("[#B8DB80]Point Info on your beloved Song🌹[/#B8DB80]")
+        console.print("[#B8DB80]Point Info on your beloved Song 🌹[/#B8DB80]")
         with spinner2017("Fetching song details"):
             box = get_song_info(url)
         album = box.get("album")
