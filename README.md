@@ -38,45 +38,47 @@ A **Python-based CLI tool** to download **YouTube Music songs and playlists** in
 
 ## 💾 Installation
 
-### 1. Clone the repository
+### 1. Install pipx
+
+`pipx` installs Python CLI tools globally so they work from any terminal without activating a virtual environment.
+
+**Linux / macOS:**
+```bash
+sudo apt install pipx   # Debian/Ubuntu
+pipx ensurepath         # adds ~/.local/bin to PATH (restart terminal after)
+```
+
+**Windows:**
+```powershell
+python -m pip install --user pipx
+python -m pipx ensurepath
+```
+
+### 2. Clone the repository
 
 ```bash
 git clone https://github.com/AbdelAziz-Mseddi/dRose.git
 cd dRose
 ```
 
-### 2. Create and activate a virtual environment
-
-**Windows:**
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-**Linux / macOS:**
-```bash
-python -m venv venv
-source venv/bin/activate
-```
-
-### 3. Install the package
+### 3. Install drose
 
 **For regular use:**
 ```bash
-pip install -e .
+pipx install .
 ```
 
-**For development (tests, tooling):**
+**For development (editable install — code changes apply immediately):**
 ```bash
-pip install -e ".[dev]"
+pipx install --editable .
 ```
 
-**For development (with web features):**
+**For development with extras (tests, web features):**
 ```bash
-pip install -e ".[web]"
+pipx install --editable ".[dev]"
 ```
 
-The package will be installed in editable mode with all CLI commands available.
+After installation, `drose` is available globally from any directory.
 
 ---
 
@@ -252,7 +254,6 @@ dRose/
 
 ## ⚠️ Notes
 
-- The project uses a virtual environment for dependency management
 - For Windows users, `.DS_Store` files are not relevant
 
 ---
