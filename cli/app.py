@@ -84,7 +84,7 @@ def print_welcome():
 @app.callback(invoke_without_command=True)
 def main(
     ctx: typer.Context,
-    version: bool = typer.Option(False, "--version", help="Show version"),
+    version: bool = typer.Option(False, "-v", "--version", help="Show version"),
 ):
     """
     drose :3
@@ -93,7 +93,7 @@ def main(
     if ctx.invoked_subcommand is None and not version:
         print_welcome()
     if version:
-        typer.echo("drose v1.1.0")
+        typer.echo("drose v1.1.2")
 
 
 # initial commands
