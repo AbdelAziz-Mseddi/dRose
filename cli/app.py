@@ -162,7 +162,7 @@ def playlist(
         console.print("[#B8DB80]Looks like it's a song URL, not a playlist URL.[/#B8DB80]")
         console.print("[#B8DB80]Hold your horse, i'm gonna bootleg it 🏎️[/#B8DB80]")
         song(
-            url=url,
+            urls=[url],
             alll=alll,
             listt=listt,
             output_dir=output_dir,
@@ -242,7 +242,9 @@ def playlist(
 
 @app.command()
 def song(
-    url: str = typer.Argument(..., help="URL link of the Wanted Song"),
+    urls: list[str] = typer.Argument(
+        ..., help="One or more URL links of wanted songs"
+    ),
     alll: bool = typer.Option(
         False, "--all", "-a", help="Show additional Info (Release Date, Estimated Size)"
     ),
@@ -257,72 +259,79 @@ def song(
     ),
 ):
     """Download and Manage Songs"""
-    try:
-        is_song, _ = is_song_url(url)
-    except Exception as exc:
-        raise typer.BadParameter(str(exc)) from exc
+    cfg = conf.get_config()
+    eff_output = (
+        str(output_dir) if output_dir is not None else cfg[0].get("output_folder", ".")
+    )
+    eff_format = (
+        audio_format if audio_format is not None else cfg[0].get("audio_format", "mp3")
+    )
 
-    if not is_song:
-        console.print("[#B8DB80]Looks like it's a playlist URL, not a song URL.[/#B8DB80]")
-        console.print("[#B8DB80]Hold your horse, i'm gonna bootleg it 🏎️[/#B8DB80]")
-        playlist(
-            url=url,
-            output_dir=output_dir,
-            audio_format=audio_format,
-            alll=alll,
-            listt=listt,
-        )
-        return
+    for idx, url in enumerate(urls, start=1):
+        if len(urls) > 1:
+            console.print(f"[#B8DB80]Song {idx}/{len(urls)}[/#B8DB80]")
 
-    if listt:
-        console.print("[#B8DB80]Point Info on your beloved Song 🌹[/#B8DB80]")
-        with spinner2017("Fetching song details"):
-            box = get_song_info(url)
-        album = box.get("album")
-        artists = box.get("artists")
-        if isinstance(artists, str):
-            artist_list = re.split(r",|&|feat\.?|ft\.?", artists, flags=re.IGNORECASE)
-            artists = [a.strip() for a in artist_list if a.strip()]
-        mul_art = True if artists is not None and len(artists) > 1 else False
-        artist = ", ".join(artists) if artists is not None else box["uploader"]
-        console.print("[#F7F6D3]ø Song Title: [/#F7F6D3]", box["title"])
-        if mul_art:
-            preartist = "ø Artists collaborating: "
-        elif box.get("artists") is not None:
-            preartist = "ø Artist: "
-        else:
-            preartist = "ø Uploader Username: "
-        if artist.endswith("- Topic"):
-            artist = artist.replace("- Topic", "").rstrip()
-        console.print(f"[#F7F6D3]{preartist}[/#F7F6D3]", artist)
-        console.print(
-            "[#F7F6D3]ø Song Duration: [/#F7F6D3]", format_duration(box["duration"])
-        )
-        if album is not None:
-            console.print("[#F7F6D3]ø Album: [/#F7F6D3]", album)
-        if alll:
-            release = box.get("release")
-            release = box.get("date") if release is None else release
-            console.print("[#FFE4EF]ø Release Date: [/#FFE4EF]", format_date(release))
+        try:
+            is_song, _ = is_song_url(url)
+        except Exception as exc:
+            raise typer.BadParameter(str(exc)) from exc
+
+        if not is_song:
             console.print(
-                "[#FFE4EF]ø Estimated Size: [/#FFE4EF]",
-                format_size(box["duration"] * 192000 // 8),
+                "[#B8DB80]Looks like it's a playlist URL, not a song URL.[/#B8DB80]"
             )
-        console.print("[#F39EB6]🌹 See you, Space Cowboy...[/#F39EB6]")
-    else:
+            console.print("[#B8DB80]Hold your horse, i'm gonna bootleg it 🏎️[/#B8DB80]")
+            playlist(
+                url=url,
+                output_dir=output_dir,
+                audio_format=audio_format,
+                alll=alll,
+                listt=listt,
+            )
+            continue
+
+        if listt:
+            console.print("[#B8DB80]Point Info on your beloved Song 🌹[/#B8DB80]")
+            with spinner2017("Fetching song details"):
+                box = get_song_info(url)
+            album = box.get("album")
+            artists = box.get("artists")
+            if isinstance(artists, str):
+                artist_list = re.split(
+                    r",|&|feat\.?|ft\.?", artists, flags=re.IGNORECASE
+                )
+                artists = [a.strip() for a in artist_list if a.strip()]
+            mul_art = True if artists is not None and len(artists) > 1 else False
+            artist = ", ".join(artists) if artists is not None else box["uploader"]
+            console.print("[#F7F6D3]ø Song Title: [/#F7F6D3]", box["title"])
+            if mul_art:
+                preartist = "ø Artists collaborating: "
+            elif box.get("artists") is not None:
+                preartist = "ø Artist: "
+            else:
+                preartist = "ø Uploader Username: "
+            if artist.endswith("- Topic"):
+                artist = artist.replace("- Topic", "").rstrip()
+            console.print(f"[#F7F6D3]{preartist}[/#F7F6D3]", artist)
+            console.print(
+                "[#F7F6D3]ø Song Duration: [/#F7F6D3]",
+                format_duration(box["duration"]),
+            )
+            if album is not None:
+                console.print("[#F7F6D3]ø Album: [/#F7F6D3]", album)
+            if alll:
+                release = box.get("release")
+                release = box.get("date") if release is None else release
+                console.print("[#FFE4EF]ø Release Date: [/#FFE4EF]", format_date(release))
+                console.print(
+                    "[#FFE4EF]ø Estimated Size: [/#FFE4EF]",
+                    format_size(box["duration"] * 192000 // 8),
+                )
+            console.print("[#F39EB6]🌹 See you, Space Cowboy...[/#F39EB6]")
+            continue
+
         console.print("[bold green]Starting download...🌹[/bold green]")
         console.print(f"URL: {url}")
-        cfg = conf.get_config()
-        eff_output = (
-            str(output_dir)
-            if output_dir is not None
-            else cfg[0].get("output_folder", ".")
-        )
-        eff_format = (
-            audio_format
-            if audio_format is not None
-            else cfg[0].get("audio_format", "mp3")
-        )
         adress, name = download_audio(url, eff_output, eff_format)
         console.print("[#F6F0D7]🌹 Download complete![/#F6F0D7]")
         console.print("[#C5D89D] 🌹 File Name: [/#C5D89D]", name)

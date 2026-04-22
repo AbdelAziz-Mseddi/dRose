@@ -1,7 +1,7 @@
 name: Better_Call_Saul
 on:
   push:
-    branches: ["main", "damn_CI"]
+    branches: ["main", "damn_CI", "feat/handle_multiple_urls"]
   pull_request:
     branches: ["main"]
 jobs:

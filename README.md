@@ -122,7 +122,7 @@ drose playlist "PLAYLIST_URL" -f m4a -o ./downloads
 #### Download a Song
 
 ```bash
-drose song "SONG_URL" [OPTIONS]
+drose song "SONG_URL" ["SONG_URL" ...] [OPTIONS]
 ```
 
 **Options:**
@@ -135,6 +135,9 @@ drose song "SONG_URL" [OPTIONS]
 ```bash
 # Download a single song
 drose song "https://youtube.com/watch?v=..."
+
+# Download multiple songs in one command
+drose song "SONG_URL_1" "SONG_URL_2" "SONG_URL_3"
 
 # Show song info without downloading
 drose song "SONG_URL" --list --all

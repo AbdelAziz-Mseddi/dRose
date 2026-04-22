@@ -108,3 +108,25 @@ def test_song(mock_config, monkeypatch, tmp_path):
     )  # hemli le ma kedni :3
     assert calls["output"] == str(tmp_path)  # because mock_config sets output_folder
     assert calls["format"] == "mp3"
+
+
+def test_song_multiple_urls(mock_config, monkeypatch, tmp_path):
+    calls = []
+
+    def fake_download_audio(url, out, fmt):
+        calls.append({"url": url, "output": out, "format": fmt})
+        return out + "Fijibi" + fmt, "Fijibi"
+
+    monkeypatch.setattr(app, "download_audio", fake_download_audio)
+    runner = CliRunner()
+    urls = [
+        "https://music.youtube.com/watch?v=E6no86tg0fQ",
+        "https://music.youtube.com/watch?v=kJQP7kiw5Fk",
+    ]
+    result = runner.invoke(app.app, ["song", *urls])
+    assert result.exit_code == 0
+    assert len(calls) == 2
+    assert [call["url"] for call in calls] == urls
+    for call in calls:
+        assert call["output"] == str(tmp_path)
+        assert call["format"] == "mp3"
