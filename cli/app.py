@@ -8,7 +8,7 @@ from core.utils import (
     format_date,
     spinner2016,
     spinner2017,
-    is_song_url
+    is_song_url,
 )
 from core.playlist import download_playlist, get_playlist_info, get_song_info
 from core.downloader import download_audio
@@ -159,7 +159,9 @@ def playlist(
         raise typer.BadParameter(str(exc)) from exc
 
     if is_song:
-        console.print("[#B8DB80]Looks like it's a song URL, not a playlist URL.[/#B8DB80]")
+        console.print(
+            "[#B8DB80]Looks like it's a song URL, not a playlist URL.[/#B8DB80]"
+        )
         console.print("[#B8DB80]Hold your horse, i'm gonna bootleg it 🏎️[/#B8DB80]")
         song(
             urls=[url],
@@ -242,9 +244,7 @@ def playlist(
 
 @app.command()
 def song(
-    urls: list[str] = typer.Argument(
-        ..., help="One or more URL links of wanted songs"
-    ),
+    urls: list[str] = typer.Argument(..., help="One or more URL links of wanted songs"),
     alll: bool = typer.Option(
         False, "--all", "-a", help="Show additional Info (Release Date, Estimated Size)"
     ),
@@ -322,7 +322,9 @@ def song(
             if alll:
                 release = box.get("release")
                 release = box.get("date") if release is None else release
-                console.print("[#FFE4EF]ø Release Date: [/#FFE4EF]", format_date(release))
+                console.print(
+                    "[#FFE4EF]ø Release Date: [/#FFE4EF]", format_date(release)
+                )
                 console.print(
                     "[#FFE4EF]ø Estimated Size: [/#FFE4EF]",
                     format_size(box["duration"] * 192000 // 8),
@@ -335,8 +337,9 @@ def song(
         adress, name = download_audio(url, eff_output, eff_format)
         console.print("[#F6F0D7]🌹 Download complete![/#F6F0D7]")
         console.print("[#C5D89D] 🌹 File Name: [/#C5D89D]", name)
-        console.print("[#9CAB84]  🌹 Location : [/#9CAB84]", adress)
-        console.print("[#89986D]   🌹 See you around, Officer (^_~)[/#89986D]")
+        if idx == len(urls):
+            console.print("[#9CAB84]  🌹 Location : [/#9CAB84]", adress)
+            console.print("[#89986D]   🌹 See you around, Officer (^_~)[/#89986D]")
 
 
 if __name__ == "__main__":
