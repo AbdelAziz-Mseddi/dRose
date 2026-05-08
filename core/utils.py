@@ -180,6 +180,19 @@ def spinner2017(message: str):
         task = p.add_task(description=message, total=None)
         yield p, task
 
+@contextmanager
+def spinner2018(message: str):
+    """Another context manager because the user is our priority :p"""
+    with Progress(
+        SpinnerColumn("earth"),
+        TextColumn("[progress.description]{task.description}"),
+        TextColumn("ø"),
+        TextColumn("[#FF5C00]Please wait..."),
+        transient=True,
+    ) as p:
+        task = p.add_task(description=message, total=None)
+        yield p, task
+
 
 ###Ensure links without https:// are supported and handle spaces###
 def ensure_url_scheme(url):

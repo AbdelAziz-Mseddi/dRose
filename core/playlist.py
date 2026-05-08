@@ -135,6 +135,7 @@ def download_playlist(url, output_folder=".", audio_format="mp3"):
             "No downloadable tracks found in this playlist. It may be empty, private, or unavailable."
         )
 
+    downloaded_songs : int = 0
     metadata = get_playlist_info(url)
     title = metadata.get("title") or "playlist"
     title = utils.sanitize_filename(title)
@@ -142,10 +143,12 @@ def download_playlist(url, output_folder=".", audio_format="mp3"):
     for track in urls:
         try:
             downloader.download_audio(track, f"{output_folder}/{title}", audio_format)
+            downloaded_songs += 1
         except Exception as exc:
             raise RuntimeError(
                 "A track failed to download. Please try again or check your connection."
             ) from exc
+    return downloaded_songs
 
 
 if __name__ == "__main__":

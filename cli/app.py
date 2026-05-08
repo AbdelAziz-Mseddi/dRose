@@ -8,6 +8,7 @@ from core.utils import (
     format_date,
     spinner2016,
     spinner2017,
+    spinner2018,
     is_song_url,
     sanitize_filename,
     create_folder,
@@ -234,6 +235,7 @@ def playlist(
                 format_size(totDur * 192000 // 8),
             )
     else:
+        downloaded_songs : int = 0
         console.print(f"URL: {url}")
         cfg = conf.get_config()
         eff_output = (
@@ -247,8 +249,8 @@ def playlist(
             else cfg[0].get("audio_format", "mp3")
         )
         if prompt_each:
-            console.print("[#FF5C00]Starting interactive download...🌹[/#FF5C00]")
-            with spinner2017("Fetching playlist details"):
+            console.print("[#cdb4db]Starting interactive download...🌹[/#cdb4db]")
+            with spinner2018("Making a tour around the playlist"):
                 metadata = get_playlist_info(url)
                 urls = get_song_urls_from_playlist(url)
 
@@ -257,9 +259,9 @@ def playlist(
             create_folder(safe_title, eff_output)
 
             for idx, track_url in enumerate(urls, start=1):
-                console.print(f"[#B8DB80]Song {idx}/{len(urls)}[/#B8DB80]")
+                console.print(f"[#ffc8dd]Song {idx}/{len(urls)}[/#ffc8dd]")
                 try:
-                    with spinner2017("Fetching song details"):
+                    with spinner2018("Fetching song details"):
                         info = get_song_info(track_url)
                 except Exception:
                     console.print("[red]Could not fetch song details; skipping.[/red]")
@@ -267,22 +269,23 @@ def playlist(
                 title = info.get("title") or track_url
                 duration = info.get("duration") or 0
                 console.print(
-                    f"  [#DDAED3]{title}[/#DDAED3] — {format_duration(duration)} — {format_size(duration * 192000 // 8)}"
+                    f"  [#ffafcc]{title}[/#ffafcc] — {format_duration(duration)} — {format_size(duration * 192000 // 8)}"
                 )
                 if typer.confirm(f"Download '{title}'?"):
                     console.print("Downloading...")
                     try:
                         adress, name = download_audio(track_url, f"{eff_output}/{safe_title}", eff_format)
-                        console.print("[#F6F0D7]🌹 Download complete![/#F6F0D7]")
+                        downloaded_songs += 1
+                        console.print("[#bde0fe]🌹 Download complete![/#bde0fe]")
                     except Exception:
-                        console.print("[red]Failed to download track.[/red]")
+                        console.print("[red]Failed to download track :([/red]")
 
-            console.print("[bold green]🌹 Download complete![/bold green]")
+            console.print(f"[#a2d2ff]Downloaded {downloaded_songs} songs 🌹[/#a2d2ff]")
         else:
             console.print("[#FF5C00]Starting download...🌹[/#FF5C00]")
             with spinner2017("We are cooking"):
-                download_playlist(url, eff_output, eff_format)
-            console.print("[bold green]🌹 Download complete![/bold green]")
+                downloaded_songs = download_playlist(url, eff_output, eff_format)
+            console.print(f"[bold green]Downloaded {downloaded_songs} songs 🌹[/bold green]")
 
 
 @app.command()
