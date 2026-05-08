@@ -9,8 +9,15 @@ from core.utils import (
     spinner2016,
     spinner2017,
     is_song_url,
+    sanitize_filename,
+    create_folder,
 )
-from core.playlist import download_playlist, get_playlist_info, get_song_info
+from core.playlist import (
+    download_playlist,
+    get_playlist_info,
+    get_song_info,
+    get_song_urls_from_playlist,
+)
 from core.downloader import download_audio
 from cli import config_store as defConf
 from pathlib import Path
@@ -151,6 +158,9 @@ def playlist(
         help="Show Duration, Estimated Size of Playlist and Songs, Artists",
     ),
     listt: bool = typer.Option(False, "--list", "-l", help="List Songs + Informations"),
+    prompt_each: bool = typer.Option(
+        False, "--prompt", "-p", help="Prompt for each song before downloading"
+    ),
 ):
     """Download and Manage Playlists"""
     try:
@@ -224,7 +234,6 @@ def playlist(
                 format_size(totDur * 192000 // 8),
             )
     else:
-        console.print("[#FF5C00]Starting download...🌹[/#FF5C00]")
         console.print(f"URL: {url}")
         cfg = conf.get_config()
         eff_output = (
@@ -237,9 +246,43 @@ def playlist(
             if audio_format is not None
             else cfg[0].get("audio_format", "mp3")
         )
-        with spinner2017("We are cooking"):
-            download_playlist(url, eff_output, eff_format)
-        console.print("[bold green]🌹 Download complete![/bold green]")
+        if prompt_each:
+            console.print("[#FF5C00]Starting interactive download...🌹[/#FF5C00]")
+            with spinner2017("Fetching playlist details"):
+                metadata = get_playlist_info(url)
+                urls = get_song_urls_from_playlist(url)
+
+            pl_title = metadata.get("title") or "playlist"
+            safe_title = sanitize_filename(pl_title)
+            create_folder(safe_title, eff_output)
+
+            for idx, track_url in enumerate(urls, start=1):
+                console.print(f"[#B8DB80]Song {idx}/{len(urls)}[/#B8DB80]")
+                try:
+                    with spinner2017("Fetching song details"):
+                        info = get_song_info(track_url)
+                except Exception:
+                    console.print("[red]Could not fetch song details; skipping.[/red]")
+                    continue
+                title = info.get("title") or track_url
+                duration = info.get("duration") or 0
+                console.print(
+                    f"  [#DDAED3]{title}[/#DDAED3] — {format_duration(duration)} — {format_size(duration * 192000 // 8)}"
+                )
+                if typer.confirm(f"Download '{title}'?"):
+                    console.print("Downloading...")
+                    try:
+                        adress, name = download_audio(track_url, f"{eff_output}/{safe_title}", eff_format)
+                        console.print("[#F6F0D7]🌹 Download complete![/#F6F0D7]")
+                    except Exception:
+                        console.print("[red]Failed to download track.[/red]")
+
+            console.print("[bold green]🌹 Download complete![/bold green]")
+        else:
+            console.print("[#FF5C00]Starting download...🌹[/#FF5C00]")
+            with spinner2017("We are cooking"):
+                download_playlist(url, eff_output, eff_format)
+            console.print("[bold green]🌹 Download complete![/bold green]")
 
 
 @app.command()
