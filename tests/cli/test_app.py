@@ -130,3 +130,59 @@ def test_song_multiple_urls(mock_config, monkeypatch, tmp_path):
     for call in calls:
         assert call["output"] == str(tmp_path)
         assert call["format"] == "mp3"
+
+
+def test_playlist_prompt(mock_config, monkeypatch, tmp_path):
+    calls = []
+
+    urls = [
+        "https://music.youtube.com/watch?v=one",
+        "https://music.youtube.com/watch?v=two",
+        "https://music.youtube.com/watch?v=three",
+    ]
+
+    def fake_get_playlist_info(url):
+        return {"title": "Prompt Playlist", "size": 3, "tracks": []}
+
+    def fake_get_urls(url):
+        return urls
+
+    def fake_get_song_info(url):
+        mapping = {urls[0]: "One", urls[1]: "Two", urls[2]: "Three"}
+        return {"title": mapping[url], "duration": 200}
+
+    def fake_download_audio(url, out, fmt):
+        calls.append({"url": url, "output": out, "format": fmt})
+        return out + "Fijibi" + fmt, "Fijibi"
+
+    # Patch core functions so `is_song_url` and other imports use the fakes
+    import core.playlist as core_playlist
+    import core.downloader as core_downloader
+
+    monkeypatch.setattr(core_playlist, "get_playlist_info", fake_get_playlist_info)
+    monkeypatch.setattr(core_playlist, "get_song_urls_from_playlist", fake_get_urls)
+    monkeypatch.setattr(core_playlist, "get_song_info", fake_get_song_info)
+    monkeypatch.setattr(core_downloader, "download_audio", fake_download_audio)
+    # Also patch names imported into the CLI app module
+    monkeypatch.setattr(app, "get_playlist_info", fake_get_playlist_info)
+    monkeypatch.setattr(app, "get_song_urls_from_playlist", fake_get_urls)
+    monkeypatch.setattr(app, "get_song_info", fake_get_song_info)
+    monkeypatch.setattr(app, "download_audio", fake_download_audio)
+
+    runner = CliRunner()
+    # Answers: yes, no, yes
+    result = runner.invoke(
+        app.app,
+        [
+            "playlist",
+            "https://music.youtube.com/playlist?list=OLAK5uy_example",
+            "-p",
+        ],
+        input="y\nn\ny\n",
+    )
+    assert result.exit_code == 0
+    # Only two downloads should have been called (first and third)
+    assert len(calls) == 2
+    for call in calls:
+        assert call["output"].startswith(str(tmp_path))
+        assert call["format"] == "mp3"
