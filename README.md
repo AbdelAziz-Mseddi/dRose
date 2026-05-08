@@ -1,7 +1,7 @@
 <div align="center">
   <img src="assets/dRose.png" alt="dragoulaRose Logo" width="200" height="auto">
   
-  <h1>dRose v1.1.2</h1>
+  <h1>dRose v1.2.0</h1>
   
   <p>
     <b>The Ultimate YouTube Music Downloader</b>
@@ -106,6 +106,7 @@ drose playlist "PLAYLIST_URL" [OPTIONS]
 - `-f, --format FORMAT` - Audio format: mp3, m4a, etc. (defaults to config)
 - `-l, --list` - Show playlist information without downloading
 - `-a, --all` - Show detailed info (duration, size, artists)
+- `-p, --prompt` - Prompt for each song in the playlist before downloading (interactive)
 
 **Examples:**
 ```bash
