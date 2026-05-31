@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from db.models import Song, DownloadRecord
+from db.models import Song, Playlist, DownloadRecord
 
 
 class SongRepository:
@@ -60,3 +60,55 @@ class DownloadRecordRepository:
             .limit(limit)
             .all()
         )
+
+    def delete_all_history(self):
+        """Delete all download history rows"""
+        count = self.session.query(DownloadRecord).delete(synchronize_session=False)
+        return count
+
+
+class PlaylistRepository:
+    def __init__(self, session: Session):
+        self.session = session
+
+    def get_or_create(
+        self,
+        name: str,
+        youtube_id: str,
+        youtube_url: str,
+    ):
+        """Get existing playlist or create new one"""
+        playlist = (
+            self.session.query(Playlist)
+            .filter(Playlist.youtube_id == youtube_id)
+            .first()
+        )
+
+        if not playlist:
+            playlist = Playlist(
+                name=name,
+                youtube_id=youtube_id,
+                youtube_url=youtube_url,
+            )
+            self.session.add(playlist)
+
+        return playlist
+
+    def get_all_playlists(self):
+        """Get all stored playlists"""
+        return self.session.query(Playlist).order_by(Playlist.created_at.desc()).all()
+
+    def get_downloaded_playlists(self):
+        """Get only playlists that have download history"""
+        return (
+            self.session.query(Playlist)
+            .join(DownloadRecord, DownloadRecord.playlist_id == Playlist.id)
+            .distinct()
+            .order_by(Playlist.created_at.desc())
+            .all()
+        )
+
+    def delete_all_playlists(self):
+        """Delete all stored playlists"""
+        count = self.session.query(Playlist).delete(synchronize_session=False)
+        return count

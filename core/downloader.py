@@ -10,6 +10,8 @@ from rich.progress import (
     TimeRemainingColumn,
 )
 from . import utils
+from db.database import get_db_session
+from db.repository import SongRepository, DownloadRecordRepository
 
 ###Locate and return ffmpeg from imageio-ffmpeg.###
 
@@ -34,7 +36,7 @@ ydl_opts = {
 ###Download original audio file with yt-dlp###
 
 
-def download_audio(url, output_folder=".", audio_format="mp3"):
+def download_audio(url, output_folder=".", audio_format="mp3", playlist_id=None):
     url = utils.ensure_url_scheme(url)
     os.makedirs(output_folder, exist_ok=True)
     audio_format = audio_format.lower()
@@ -94,7 +96,45 @@ def download_audio(url, output_folder=".", audio_format="mp3"):
             filename = os.path.splitext(filename)[0] + "." + audio_format
             songName = utils.sanitize_filename(song.get("title"))
             adress = os.path.abspath(filename)
-            return adress, songName
+    # Save metadata after successful download
+    session = get_db_session()
+
+    try:
+        song_repo = SongRepository(session)
+        record_repo = DownloadRecordRepository(session)
+
+        artist = (
+            song.get("artist")
+            or song.get("uploader")
+            or song.get("channel")
+            or "Unknown"
+        )
+
+        db_song = song_repo.get_or_create(
+            title=song["title"],
+            artist=artist,
+            duration=song.get("duration", 0),
+            youtube_id=song["id"],
+            youtube_url=url,
+        )
+
+        record_repo.log_download(
+            song_id=db_song.id,
+            format=audio_format,
+            output_path=adress,
+            playlist_id=playlist_id,
+        )
+
+        session.commit()
+
+    except Exception:
+        session.rollback()
+        raise
+
+    finally:
+        session.close()
+
+    return adress, songName
 
 
 if __name__ == "__main__":

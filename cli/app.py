@@ -1,6 +1,6 @@
 import typer
 from rich.console import Console
-from cli.commands import config, doctor
+from cli.commands import config, doctor, history
 from core.utils import (
     zip_folder,
     format_duration,
@@ -42,6 +42,7 @@ app = typer.Typer(
 # adding the precious commands
 app.add_typer(config.app, name="config", help="Manage Configurations")
 app.add_typer(doctor.app, name="doctor", help="Check System Requirements")
+app.add_typer(history.app, name="history", help="Show download history")
 
 
 def print_welcome():

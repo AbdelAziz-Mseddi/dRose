@@ -1,5 +1,7 @@
 from . import downloader
 from . import utils
+from db.database import get_db_session
+from db.repository import PlaylistRepository, DownloadRecordRepository, SongRepository
 ###
 
 ydl_opts = {
@@ -141,15 +143,36 @@ def download_playlist(url, output_folder=".", audio_format="mp3"):
     title = metadata.get("title") or "playlist"
     title = utils.sanitize_filename(title)
     utils.create_folder(title, output_folder)
-    for track in urls:
-        try:
-            downloader.download_audio(track, f"{output_folder}/{title}", audio_format)
-            downloaded_songs += 1
-        except Exception as exc:
-            # Log the failure and continue with the next track
-            failed_tracks.append(str(track))
-            print(f"Warning: failed to download track {track}: {exc}")
-            continue
+
+    session = get_db_session()
+    try:
+        playlist_repo = PlaylistRepository(session)
+        playlist = playlist_repo.get_or_create(
+            name=metadata.get("title") or "playlist",
+            youtube_id=metadata.get("id") or url,
+            youtube_url=url,
+        )
+        session.commit()
+
+        song_repo = SongRepository(session)
+        record_repo = DownloadRecordRepository(session)
+
+        for track in urls:
+            try:
+                adress, song_name = downloader.download_audio(
+                    track,
+                    f"{output_folder}/{title}",
+                    audio_format,
+                    playlist_id=playlist.id,
+                )
+                downloaded_songs += 1
+            except Exception as exc:
+                # Log the failure and continue with the next track
+                failed_tracks.append(str(track))
+                print(f"Warning: failed to download track {track}: {exc}")
+                continue
+    finally:
+        session.close()
     return downloaded_songs
 
 

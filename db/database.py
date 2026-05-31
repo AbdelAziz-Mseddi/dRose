@@ -11,7 +11,7 @@ DROSE_DIR.chmod(0o700) # '0o' for octal, rwx for owner (he who executes this fil
 DB_PATH = DROSE_DIR / "drose.db"
 DB_PATH = DB_PATH.resolve()
 
-DB_URL = os.getenv("DROSE_DB_URL", f"sqlite///{DB_PATH}")
+DB_URL = os.getenv("DROSE_DB_URL", f"sqlite:///{DB_PATH}")
 
 # SQLAlchemy's central object that knows how to talk to the database, Application -> Engine -> SQLite
 # SQLite normally restricts a connection to the thread that created it, so we use check_same_thread = False
