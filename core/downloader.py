@@ -117,6 +117,7 @@ def download_audio(url, output_folder=".", audio_format="mp3", playlist_id=None)
             youtube_id=song["id"],
             youtube_url=url,
         )
+        session.flush()
 
         record_repo.log_download(
             song_id=db_song.id,
