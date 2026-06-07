@@ -149,7 +149,7 @@ def download_playlist(url, output_folder=".", audio_format="mp3"):
         playlist_repo = PlaylistRepository(session)
         playlist = playlist_repo.get_or_create(
             name=metadata.get("title") or "playlist",
-            youtube_id=metadata.get("id") or url,
+            youtube_id=metadata.get("id") or utils.extract_playlist_id(url),
             youtube_url=url,
         )
         session.commit()

@@ -180,6 +180,7 @@ def spinner2017(message: str):
         task = p.add_task(description=message, total=None)
         yield p, task
 
+
 @contextmanager
 def spinner2018(message: str):
     """Another context manager because the user is our priority :p"""
@@ -232,6 +233,12 @@ def is_song_url(url: str) -> tuple[bool, str | None]:
         merda = inter.get("title")
         title = merda
         return (False, title)
+
+
+def extract_playlist_id(url: str) -> str | None:
+    from urllib.parse import urlparse, parse_qs
+    query = parse_qs(urlparse(url).query)
+    return query.get("list", [None])[0]
 
 
 if __name__ == "__main__":
