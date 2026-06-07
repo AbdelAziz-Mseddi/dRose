@@ -22,7 +22,7 @@ drose = "cli.app:app"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["cli*", "core*"]
+include = ["cli*", "core*", "db*"]
 exclude = ["web*", "downloads*", "rawDownloads*", "logos*", "assets*", "zip_test*", "venv*"]
 
 [project.optional-dependencies]
