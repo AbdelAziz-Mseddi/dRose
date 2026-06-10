@@ -1,5 +1,6 @@
 import typer
 from rich.console import Console
+from rich.prompt import Prompt
 from cli.commands import config, doctor, history
 from core.utils import (
     zip_folder,
@@ -197,7 +198,9 @@ def playlist(
             artist = []
             for zong in box["tracks"]:
                 name = zong[2]
-                if name.endswith("- Topic"):
+                if name is None:
+                    name = Prompt.ask("We could not fetch this song's artist's name, who is he ?", default="Anonymous")
+                elif name.endswith("- Topic"):
                     name = name.replace("- Topic", "").rstrip()
                 if name not in artist:
                     artist.append(name)
@@ -218,7 +221,9 @@ def playlist(
             if track[0] != "[Deleted video]":
                 if alll:
                     artist = track[2]
-                    if artist.endswith("- Topic"):
+                    if name is None:
+                        name = Prompt.ask("We could not fetch this song's artist's name, who is he ?", default="Anonymous")
+                    elif artist.endswith("- Topic"):
                         artist = artist.replace("- Topic", "").rstrip()
                     console.print(
                         f"  [#DDAED3]╠ {track[0]}[/#DDAED3], [#FFDAB3]{artist}[/#FFDAB3][#B0FFFA]・゜゜・．{format_duration(track[1])}[/#B0FFFA] [#F5FBE6] ◁◁ ▐ ▌ ▷▷ {format_size(track[1] * 192000 // 8)}[/#F5FBE6]"
@@ -357,7 +362,9 @@ def song(
                 preartist = "ø Artist: "
             else:
                 preartist = "ø Uploader Username: "
-            if artist.endswith("- Topic"):
+            if artist is None:
+                artist = input()
+            elif artist.endswith("- Topic"):
                 artist = artist.replace("- Topic", "").rstrip()
             console.print(f"[#F7F6D3]{preartist}[/#F7F6D3]", artist)
             console.print(
